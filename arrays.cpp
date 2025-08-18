@@ -209,12 +209,24 @@ int linearSearch(vector<int>& nums, int target) {
         else  return i;
     }
 
+vector<int> unionArray(vector<int>& nums1, vector<int>& nums2) {
+    vector<int> unionArr={0,0,0,0,0,0};
+    int i=0;
+    for(auto x : nums1){
+        unionArr[i]=x;
+        i++;
+    }
+    return unionArr;
+}
 
 
-    
 int main(){
-    vector<int> nums={0, 1, 4, 0, 5, 2};
-    cout<< linearSearch(nums,4);
+    vector<int> nums1={0, 1, 4, 0, 5, 2};
+    vector<int> nums2={ 3, 7, 12};
+    
+    for(auto x:unionArray(nums1,nums2)){
+        cout<<x<<", ";
+    }
     return 0;
 }
 
