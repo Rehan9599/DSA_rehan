@@ -20,15 +20,16 @@ vector<int> selectionSort(vector<int>& nums) {
     }
 
 vector<int> bubbleSort(vector<int>& nums) {
-    for(int i=0; i<nums.size()-1; i++){
-        int j=i+1;
-        if(nums[i]<=nums[j]){
+    for(int i=nums.size()-1; i>0; i--){
+        for(int j=0; j<i;j++){
+           if(nums[i]<=nums[j]){
             cout<< nums[i] << " , "<<nums[j]<< endl;
             int t= nums[j];
             nums[j]=nums[i];
             nums[i]=t;
         }
-    }
+    } 
+        }
     return nums;
 }
 
@@ -129,8 +130,8 @@ void quickSort(vector<int>& nums, int low, int high){
 }
 }
 int main(){
-  vector<int> nums={7, 4,4,1,1,2,8,7,6,9,5, 3};
-  quickSort(nums,0, nums.size()-1);
+  vector<int> nums={7,8,7,6,9};
+  bubbleSort(nums);
   for(int i=0; i<nums.size(); i++){
     cout<<nums[i]<<",";
   }
