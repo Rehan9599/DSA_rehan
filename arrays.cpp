@@ -209,24 +209,38 @@ int linearSearch(vector<int>& nums, int target) {
         else  return i;
     }
 
-vector<int> unionArray(vector<int>& nums1, vector<int>& nums2) {
-    vector<int> unionArr={0,0,0,0,0,0};
+void unionArray(vector<int>& nums1, vector<int>& nums2) {
+    vector<int> unionArr(nums1.size()+nums2.size());
     int i=0;
     for(auto x : nums1){
         unionArr[i]=x;
         i++;
     }
-    return unionArr;
+    cout<<i<<endl;
+    int count=0;
+    for(int j=0;j<nums2.size();j++){
+        if(i>nums1.size()+nums2.size()) break;
+        for(int r=0;r<i; r++){
+            if(nums2[j]==unionArr[r]){
+                count=1;
+                break;
+            }
+        }
+        if(count==0){
+            unionArr[i++]=nums2[j];
+            cout<<i<<endl;
+        }
+    }
+    for(auto x: unionArr){
+        cout<< x<<", ";
+    }
 }
 
 
 int main(){
     vector<int> nums1={0, 1, 4, 0, 5, 2};
-    vector<int> nums2={ 3, 7, 12};
-    
-    for(auto x:unionArray(nums1,nums2)){
-        cout<<x<<", ";
-    }
+    vector<int> nums2={ 4,8, 7, 12};
+    unionArray(nums1,nums2);
     return 0;
 }
 

@@ -47,7 +47,7 @@ void transposeMatrix(int i, int j, int matrix[5][3]){
 
 // hellicalOrSymm(i,j,r,d,l,u,matrix);
 // }
-void hellicalOrAnSymm(int i, int j,int r,int d,int l,int u, int matrix[3][3]){
+void hellicalOrAnSymm(int i, int j,int r,int d,int l,int u, int matrix[4][3]){
 printf("\n");
 printf("%d ,%d ,%d ,%d ,%d ,%d ,", i,j,r,d,l,u);
 printf("\n");
@@ -142,7 +142,7 @@ hellicalOrAnSymm(i,j,r,d,l,u,matrix);
 int main(){
     // int  i=2;
     // int j=3;
-    int matrix[3][3]={{0,1,2},{3,5,6},{7,4,7}};
-   hellicalOrAnSymm(3,3,0,2,2,0,matrix);
+    int matrix[4][3]={{0,1,2},{2,3,4,},{3,5,6},{7,4,7}};
+   hellicalOrAnSymm(4,3,0,3,2,0,matrix);
     return 0;
 }
