@@ -210,37 +210,145 @@ int linearSearch(vector<int>& nums, int target) {
     }
 
 void unionArray(vector<int>& nums1, vector<int>& nums2) {
-    vector<int> unionArr(nums1.size()+nums2.size());
-    int i=0;
-    for(auto x : nums1){
-        unionArr[i]=x;
-        i++;
+    vector<int> unionArr;
+    int count;
+    for(int p=0; p<nums1.size(); p++){
+        count=0;
+        for(int j=0;j<unionArr.size();j++){
+            if(unionArr[j]==nums1[p]){
+                count=1;
+                break;
+            }
+        }
+        if(count==0){
+            unionArr.push_back(nums1[p]);
+        }
     }
-    cout<<i<<endl;
-    int count=0;
+    
     for(int j=0;j<nums2.size();j++){
-        if(i>nums1.size()+nums2.size()) break;
-        for(int r=0;r<i; r++){
+        count=0;
+        for(int r=0;r<unionArr.size(); r++){
             if(nums2[j]==unionArr[r]){
                 count=1;
                 break;
             }
         }
         if(count==0){
-            unionArr[i++]=nums2[j];
-            cout<<i<<endl;
+            unionArr.push_back(nums2[j]);
         }
     }
+    bubbleSort(unionArr);
     for(auto x: unionArr){
-        cout<< x<<", ";
+        cout<<x <<", ";
     }
 }
 
 
-int main(){
-    vector<int> nums1={0, 1, 4, 0, 5, 2};
-    vector<int> nums2={ 4,8, 7, 12};
-    unionArray(nums1,nums2);
+
+void  unionHash(vector<int>& nums1, vector<int>& nums2){
+    int hash[10]={0};
+    for(auto x: nums1){
+        hash[x]=x;
+    }
+    for(auto y: nums2){
+        hash[y]=y;
+    }
+    for(int i=0; i<10; i++){
+        if(i>1 && hash[i]==0) continue;
+        cout<<hash[i]<<',';
+    }
+}
+
+void unionSet(vector<int>& nums1, vector<int>& nums2){
+    set<int> hash;
+    for(auto x: nums1){
+        hash.insert(x);
+    }
+    for(auto y: nums2){
+        hash.insert(y);
+    }
+    for(auto p:hash){
+        cout<<p<<",";
+    }
+}
+
+
+int missingNumber(vector<int>& nums) {
+    int n=nums.size();
+    int hash[n+1];
+    for(auto x: nums){
+        hash[x]=x;
+    }
+    int missingNum;
+    for(int i=0; i<n+1; i++){
+        if(hash[i]>10) missingNum=i;
+    }
+    for(auto y: hash){
+        cout<<y<<"\n";
+    }
+    return missingNum;
+}
+
+int findMaxConsecutiveOnes(vector<int>& nums) {
+    int count=0;
+    vector<int> store(nums.size());
+    for(int i=0;i<nums.size(); i++){
+        if(nums[i]==1) count++;
+        else {
+            store[count]=count;
+            count=0;
+        }
+    }
+    store[count]=count;
+    for(int i=0;i<nums.size();i++){
+        if(store[i]>0) count=i;
+    }
+    for(auto x: store){
+        cout<<x<<',';
+    }
+    return count;
+}
+
+
+int singleNumber(vector<int>& nums){
+    int cou;
+    for(int i=0;i<nums.size(); i++){
+        cou=0;
+        for(int j=0;j<nums.size();j++){
+            if(j==i) continue;
+            if(nums[i]==nums[j]){
+                cou++;
+            }
+           
+        }
+        if(cou==0){
+            return nums[i];
+        } 
+    }
     return 0;
 }
 
+int longestSubarray(vector<int> &nums, int k){
+    int sum=0;
+    int count=0,len=0;
+    for(int i=0; i<nums.size();i++){
+        sum=0;
+        for (int j=i; j<nums.size();j++){
+            
+            // for(int x=i; x<=j; x++){
+            //     sum+=nums[x];
+            // }
+            sum+=nums[j];
+            if(sum==k){
+                // len=max(len,j-i+1);
+                count++;
+            }
+        }
+    }
+    return count;
+}
+int main(){
+    vector<int> nums={ 1,1,2,2,4,1,1,1,1,-3,-2,-2,5,5,-4};
+    cout<< longestSubarray(nums,9);
+    return 0;
+}
