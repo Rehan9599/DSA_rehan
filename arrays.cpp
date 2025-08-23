@@ -347,8 +347,173 @@ int longestSubarray(vector<int> &nums, int k){
     }
     return count;
 }
+
+void twoSum(vector<int>& nums, int target,int i) {
+    // vector<int> result;
+// for(int i=0;i<nums.size();i++){
+//     for(int j=i+1;j<nums.size();j++){
+//         if(nums[i]+nums[j]==target){
+//             result.push_back(i);
+//             result.push_back(j);
+//         }
+//     }
+// }
+if(i==nums.size()-1) return;
+for(int j=i;j<nums.size();j++){
+        if(nums[i]+nums[j]==target){
+            cout<<i<<j;
+            return;
+        }
+}
+twoSum(nums,target,i++);
+}
+
+
+void sortZeroOneTwo(vector<int>& nums) {
+    // int i=0,j=0,k=0;
+    // for(auto x: nums){
+    //     if(x==0) i++;
+    //     else if(x==1) j++;
+    //     else if(x==2)k++;
+    // }
+    // for(int p=0;p<i;p++){
+    //     nums[p]=0;
+    // }
+    // for(int p=i;p<i+j;p++){
+    //     nums[p]=1;
+    // }
+    // for(int p=i+j;p<i+j+k;p++){
+    //     nums[p]=2;
+    // }
+
+ // Dutch National flag algorithm. 
+
+    int low=0,mid=0,high=nums.size()-1;
+    while(mid<=high){
+        if(nums[mid]==0){
+            swap(nums[mid],nums[low]);
+            mid++;
+            low++;
+        }
+        else if(nums[mid]==1){
+            mid++;
+        }
+        else{
+            swap(nums[mid],nums[high]);
+            high--;
+        }
+    }
+
+}
+
+int majorityElement(vector<int>& nums) {
+    // vector<int> hash(nums.size(),0);
+    // for(auto x: nums){
+    //     hash[x]++;
+    // }
+    // for(int i=0;i<hash.size();i++){
+    //     if(hash[i]>=nums.size()/2) return i;
+    // }
+
+//Moore’s Voting Algorithm:
+    int count=0, element;
+    for(int i=0; i<nums.size(); i++){
+        if(count==0) {
+            count=1;
+            element=nums[i];
+        }
+        else if(nums[i]==element){
+            count++;
+        }
+        else{
+            count--;
+        }
+        
+    }
+    return element;
+}
+
+
+int maxSubArray(vector<int>& nums) {
+    // int j, sum,largest=INT8_MIN;
+    // for(int i=0;i<nums.size();i++){
+    //     sum=0;
+    //     for(j=i; j<nums.size(); j++){
+    //         sum+=nums[j];
+    //         // for(int p=i; p<=j; p++){
+    //         //     sum+=nums[p];
+    //         // }  
+    //          largest=max(sum,largest); 
+    //     }
+        
+    // }
+    // return largest;
+
+    //A subarray with a sum less than 0 will always reduce our answer and so this type of subarray cannot be a part of the subarray with maximum sum.
+
+    int maxi=INT16_MIN, sum=0;
+    int start=0,end=-1,ansStart=-1;
+    for(int i=0;i<nums.size();i++){
+        if(sum==0) start=i;
+        sum+=nums[i];
+        if(sum>maxi){
+            maxi=sum;
+            end=i;
+            ansStart=start;
+        }
+        if(sum<=0) {
+            sum=0;
+        }
+    }
+    cout<<ansStart<<end<<"\n";
+    for(int i=ansStart;i<=end;i++){
+        cout<<nums[i]<<",";
+    }
+    cout<<"\n";
+    return maxi;
+}
+
+
+int stockBuySell(vector<int> arr, int n){
+    int minPrice=INT16_MAX, profit=0;
+    // for(int i=0;i<n;i++){
+    //     for(int j=i+1; j<n;j++){
+    //         profit=max(profit, arr[j]-arr[i]);
+    //     }
+    // }
+    // return profit;
+
+    for(int i=0;i<n;i++){
+        minPrice=min(minPrice,arr[i]);
+        profit=max(profit,arr[i]-minPrice);
+    }
+    return profit;
+}
+
+
+vector<int> rearrangeArray(vector<int>& nums) {
+vector<int> arr(nums.size(),0);
+int pos=0,neg=1;
+for(int i=0;i<nums.size();i++){
+    if(pos>nums.size()||neg>nums.size()) break;
+    if(nums[i]>0){
+        arr[pos]=nums[i];
+        pos+=2;
+    }
+    else{
+        arr[neg]=nums[i];
+        neg+=2;
+    }
+}
+return arr;
+}
+
+
 int main(){
-    vector<int> nums={ 1,1,2,2,4,1,1,1,1,-3,-2,-2,5,5,-4};
-    cout<< longestSubarray(nums,9);
+    vector<int> nums={2, 4, 5, -1, -3, -4};
+    rearrangeArray(nums);
+    for(auto x: nums){
+        cout<<x<<",";
+    }
     return 0;
 }
