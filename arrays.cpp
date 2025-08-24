@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 #include <set>
+#include <algorithm>
 using namespace std;
 
 int largestElement(vector<int>& nums) {
@@ -495,7 +496,7 @@ vector<int> rearrangeArray(vector<int>& nums) {
 vector<int> arr(nums.size(),0);
 int pos=0,neg=1;
 for(int i=0;i<nums.size();i++){
-    if(pos>nums.size()||neg>nums.size()) break;
+    if(pos>nums.size()&& neg>nums.size()) break;
     if(nums[i]>0){
         arr[pos]=nums[i];
         pos+=2;
@@ -505,15 +506,74 @@ for(int i=0;i<nums.size();i++){
         neg+=2;
     }
 }
+for(auto x: arr){
+        cout<<x<<",";
+    }
 return arr;
 }
 
 
-int main(){
-    vector<int> nums={2, 4, 5, -1, -3, -4};
-    rearrangeArray(nums);
+
+void nextPermutation(vector<int>& nums) {
+    int breakPoint=-1;
+    for(int i=nums.size()-2;i>=0;i--){
+        if(nums[i]<nums[i+1]) breakPoint=i;
+        break;
+    }
+
+    if(breakPoint==-1){
+        reverse(nums.begin(), nums.end());
+    }
+    else{
+        for(int i=nums.size()-1; i>=breakPoint;i--){
+            if(nums[i]>nums[breakPoint]){
+                swap(nums[i],nums[breakPoint]);
+                break;
+            } 
+        }
+        reverse(nums.begin()+breakPoint+1, nums.end());
+    }
     for(auto x: nums){
         cout<<x<<",";
     }
+
+}
+
+
+
+vector<int> leaders(vector<int>& nums) {
+vector<int> leads={nums[nums.size()-1]};
+// int isLead;
+// for(int j=0;j<nums.size();j++){
+//     for(int i=j+1;i<nums.size();i++){
+//         isLead=0;
+//         if(nums[i]>nums[j]) break;
+//         else{
+//             isLead=1;
+//         }
+//     }
+//     if(isLead){
+        
+//         leads.push_back(nums[j]);
+//     }
+// }
+// if(leads[leads.size()-1] != nums[nums.size()-1]){
+//     leads.push_back(nums[nums.size()-1]);
+// }
+
+for(int i=nums.size()-2; i>=0;i--){
+    if(nums[i]>nums[i+1]) leads.push_back(nums[i]);
+}
+reverse(leads.begin(), leads.end());
+return leads;
+}
+
+int main(){
+    vector<int> nums={-3, 4, 5, 1, -4, -5};
+    for(auto x: leaders(nums)){
+        cout<<x;
+    }
+    
+    cout<<"\n";
     return 0;
 }
