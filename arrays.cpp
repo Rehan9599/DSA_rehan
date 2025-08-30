@@ -56,7 +56,7 @@ void bubbleSort(vector<int>& nums) {
     for(int i=nums.size()-1; i>0; i--){
         for(int j=0; j<i;j++){
            if(nums[i]<=nums[j]){
-            cout<< nums[i] << " , "<<nums[j]<< endl;
+            // cout<< nums[i] << " , "<<nums[j]<< endl;
             int t= nums[j];
             nums[j]=nums[i];
             nums[i]=t;
@@ -69,7 +69,7 @@ int removeDuplicates(vector<int>& nums) {
         for(int j=0; j<nums.size();j++){
             if(j==i) continue;
         if(nums[i] == nums[j]){
-            cout<<nums[i]<<","<<nums[j]<< " ";
+            // cout<<nums[i]<<","<<nums[j]<< " ";
             nums.erase(nums.begin()+j);
         }
     }
@@ -568,12 +568,87 @@ reverse(leads.begin(), leads.end());
 return leads;
 }
 
-int main(){
-    vector<int> nums={-3, 4, 5, 1, -4, -5};
-    for(auto x: leaders(nums)){
-        cout<<x;
+
+
+
+int longestConsecutive(vector<int>& nums) {
+    int k=1,lSeq=0;
+    bubbleSort(nums);
+    for(int i=0;i<nums.size()-1;i++){
+        if(nums[i+1]-nums[i] ==1){
+            k++;
+            lSeq=max(lSeq,k);
+        }
+        else{
+            k=1;
+        }
     }
-    
-    cout<<"\n";
-    return 0;
+    return lSeq;
+}
+
+void setZeroes(vector<vector<int>>& matrix) {
+    // int found;
+    // vector<int> foundrow, foundcol;
+    for(int i=0;i<matrix.size();i++){
+        for(int j=0;j<matrix[i].size();j++){
+            if(matrix[i][j]==0){
+                // found=1;
+                // foundrow.push_back(i);
+                // foundcol.push_back(j);
+
+
+            }
+        }
+    }
+//     if(found){
+//         for(int j=0;j<foundrow.size();j++){
+//          for(int i=0;i<matrix.size();i++){
+//             matrix[foundrow[j]][i]=0;
+//         }
+//          for(int i=0;i<matrix.size();i++){
+//             matrix[i][foundcol[j]]=0;
+//         }
+//     }
+// }
+    // for(int i=0;i<matrix.size();i++){
+    //     for(int j=0;j<matrix[i].size();j++){
+    //         cout<<matrix[i][j]<<",";
+    //     }
+    //     cout<<"\n";
+    // }
+}
+
+
+
+void rotateMatrix(vector<vector<int>>& matrix) {
+    int m=matrix[0].size();
+    int n=matrix.size();
+    vector<int> swappped;
+    int found;
+    for(int i=0;i<matrix.size();i++){
+        for(int j=0;j<i;j++){
+           swap(matrix[i][j], matrix[j][i]);
+        }
+    }    
+
+    for(int i=0;i<matrix.size();i++){
+        for(int j=0;j<matrix[i].size()/2;j++){
+            swap(matrix[i][j], matrix[i][m-1-j]);
+        }
+    }    
+
+}
+
+
+
+
+int main(){
+    vector<vector<int>> matrix = {
+    {0, 1, 1, 2},
+    {2, 0, 3, 1},
+    {4, 5, 0, 5},
+    {5, 6, 7, 0}
+};
+    rotateMatrix(matrix);
+return 0;
 }
