@@ -121,9 +121,44 @@ vector<int> getFloorAndCeil(vector<int> nums, int x) {
     ans[1]=nums[low];
     return ans;
 }
+
+
+
+vector<int> searchRange(vector<int> &nums, int target) {
+    vector<int> range(2,-1);
+    int low=0, high=nums.size()-1;
+    while(low<=high){
+        int mid= (low+high)/2;
+        if(target>nums[mid]){
+            low=mid+1;
+        }
+        else if(target<nums[mid]){
+            high=mid-1;
+        }
+        else if(target==nums[mid]){
+            if( mid!=low && nums[mid]==nums[low]){
+                range[0]=mid-1;
+                range[1]=mid;
+            }
+            else if(mid==low && nums[mid]!=nums[high]){
+                range[0]=mid;
+                range[1]=mid;
+            }
+            else{
+                range[0]=mid;
+                range[1]=mid+1;
+            }
+            break;
+        }
+    }
+    return range;
+}
+
+
+
 int main(){
-    vector<int> nums={3, 4, 4, 7, 8, 10};
-    for(auto x: getFloorAndCeil(nums,5)){
+    vector<int> nums={2,3,4,5,5,6,7,7};
+    for(auto x: searchRange(nums,7)){
         cout<<x<<",";
     } 
     return 0;
