@@ -124,8 +124,8 @@ vector<int> getFloorAndCeil(vector<int> nums, int x) {
 
 
 
-vector<int> searchRange(vector<int> &nums, int target) {
-    vector<int> range(2,-1);
+pair<int,int> searchRange(vector<int> &nums, int target) {
+    int start=0, end=0;
     int low=0, high=nums.size()-1;
     while(low<=high){
         int mid= (low+high)/2;
@@ -136,30 +136,91 @@ vector<int> searchRange(vector<int> &nums, int target) {
             high=mid-1;
         }
         else if(target==nums[mid]){
-            if( mid!=low && nums[mid]==nums[low]){
-                range[0]=mid-1;
-                range[1]=mid;
+            end=mid+1;
+            start=mid-1;
+            while(nums[end]==target  && end < nums.size()){
+                end++;
             }
-            else if(mid==low && nums[mid]!=nums[high]){
-                range[0]=mid;
-                range[1]=mid;
-            }
-            else{
-                range[0]=mid;
-                range[1]=mid+1;
+            while(nums[start]==target && start >=0){
+                start--;
             }
             break;
         }
+        
     }
-    return range;
+    return {start+1,end-1};
+}
+
+int countOccurrences(vector<int>& nums, int target) {
+    // int low=0, high=nums.size()-1, count=0;
+    // while(low<=high){
+    //     int mid= (low+high)/2;
+    //     if(target>nums[mid]){
+    //         low=mid+1;
+    //     }
+    //     else if(target<nums[mid]){
+    //         high=mid-1;
+    //     }
+    //     else if(target==nums[mid]){
+    //         count++; 
+    //         nums[mid]=-1;
+    //         for(int i=0; i<=mid/2;i++){
+    //             swap(nums[i], nums[mid-i]);
+    //         }
+    //         low=0, high=nums.size()-1;
+    //     }
+    // }
+    // return count;
+
+
+   return searchRange(nums,5).second - searchRange(nums,5).first +1;
 }
 
 
 
+int searchRot(vector<int> &nums, int target) {
+    int maxi=0;
+        for(auto x: nums){
+            maxi=max(maxi,x);
+        }
+        cout<< maxi<<  "\n";
+    vector<pair<int ,int>> valueInd(maxi+1,{-1,-1});
+    for(int i=0; i<nums.size(); i++){
+        valueInd[nums[i]]={nums[i],i};
+    }
+    for(int i=0; i<maxi; i++){
+        if(valueInd[i+1].first!=-1){
+            if(i==maxi) continue;
+                valueInd[i].first=valueInd[i+1].first-1;
+            }
+            else{
+                if(i==0) continue;
+                valueInd[i].first=valueInd[i-1].first+1;
+            }
+        }
+
+    for(auto x: valueInd){
+        cout<< x.first<< ","<< x.second<<"\n";
+    }
+    int low=0, high=valueInd.size()-1;
+    while(low<=high){
+        int mid= (low+high)/2;
+        if(target>valueInd[mid].first){
+            low=mid+1;
+        }
+        else if(target<valueInd[mid].first){
+        high=mid-1;
+        }
+        else if(target==valueInd[mid].first){
+            return valueInd[mid].second;
+        }
+    }
+    return -1;
+}
+
+
 int main(){
-    vector<int> nums={2,3,4,5,5,6,7,7};
-    for(auto x: searchRange(nums,7)){
-        cout<<x<<",";
-    } 
+    vector<int> nums={1,3,5};
+    cout<<searchRot(nums,3);
     return 0;
 }
