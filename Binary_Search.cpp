@@ -305,10 +305,54 @@ int singleNonDuplicate(vector<int> &nums) {
     return -1;
 }
 
+int findPeakElement(vector<int> &nums) {
+    int low=0, high=nums.size()-1;
+    int found,count=0;
+    if(high==0) return 0;
+    while(low<=high){
+        int mid= (low+high)/2;
+        cout<<nums[low]<<nums[mid]<<nums[high]<<"\n";
+        if(nums[mid]>nums[mid-1] && nums[mid]>nums[mid+1] ){
+            found=mid;
+            count++;
+            high=mid-1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    low=0, high=nums.size()-1;
+    while(low<=high){
+        int mid= (low+high)/2;
+        cout<<nums[low]<<nums[mid]<<nums[high]<<"\n";
+        if(nums[mid]>nums[mid-1] && nums[mid]>nums[mid+1] ){
+            found=mid;
+            count++;
+            low=mid+1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+
+    if(count>1){
+        return 1;
+    } 
+    else{
+        return found;
+    }
+    
+}
+
+
+
+
+
+
 
 
 int main(){
     vector<int> nums={1};
-    cout<<singleNonDuplicate(nums);
+    cout<<findPeakElement(nums);
     return 0;
 }
