@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 
@@ -345,14 +346,83 @@ int findPeakElement(vector<int> &nums) {
 }
 
 
+long long floorSqrt(long long n)  {
+    long long low=1;
+    long long high=n;
+    long long floorSq=0;
+    while(low<=high){
+        long long mid=(low+high)/2;
+        long long sq=mid*mid;
+        cout<<low<<","<<high<<","<<mid<<","<<sq<<","<<floorSq<<"\n";
+        if(sq==n) return mid;
+        if(sq>n){
+            high=mid-1;
+        }
+        else if(sq<n){
+            floorSq=mid;
+            low=mid+1;
+        }
+        
+    }
+    return floorSq;
+}
 
 
 
+int NthRoot(int N, int M) {
+    int low=1;
+    int high=M;
+    while(low<=high){
+        int mid=(low +high)/2;
+        int midSq=1;
+        for(int i=0; i<N;i++){
+            midSq*=mid;
+        }
+        if(midSq==M) return mid;
+        if(midSq>M){
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return -1;
+}
+
+
+int minimumRateToEatBananas(vector<int> nums, int h) {
+    int low=0;
+    int high=INT16_MIN;
+    int hour=0;
+    float speed=1000;
+    for(int i=0; i<nums.size(); i++){
+        high=max(high,nums[i]);
+    }
+    while(low<=high){
+        float mid=(low+high)/2;
+        hour=0;
+        for(int i=0; i<nums.size(); i++){
+            hour+=ceil((nums[i]/mid));
+        }
+        cout<<"\n";
+        cout<<low<<","<<high<<","<<mid<<","<<hour<<"\n";
+        if(hour==h){
+            speed=min(speed,mid);
+        }
+        if(hour<h){
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return speed;
+}
 
 
 
 int main(){
-    vector<int> nums={1};
-    cout<<findPeakElement(nums);
+    vector<int> nums={3,6,7,11};
+    cout<< minimumRateToEatBananas(nums, 8);
     return 0;
 }
