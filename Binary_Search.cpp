@@ -420,9 +420,96 @@ int minimumRateToEatBananas(vector<int> nums, int h) {
 }
 
 
+int roseGarden(int n,vector<int> nums, int k, int m) {
+    int low=INT16_MAX;
+    int high=INT16_MIN;
+    if(n<m*k) return -1;
+    for(int i=0;i<n;i++){
+        high=max(high,nums[i]);
+        low=min(low,nums[i]);
+    }
+    int roses=INT16_MAX;
+    while(low<=high){
+        int mid=(low+high)/2;
+        int count=0;
+        int nOfBq=0;
+        for(int i=0;i<=n-1;i+=1){
+            if(nums[i]<=mid){
+                count++;
+            }
+            else{
+                nOfBq+=(count/k);
+                count=0;
+            }
+        }
+        nOfBq+=(count/k);
+        cout<<low<<","<<high<<","<<mid<<","<<nOfBq<<"\n";
+        if(nOfBq==m){
+            roses=min(mid,roses);
+        }
+        if(nOfBq<m){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    return roses;
+}
+
+int smallestDivisor(vector<int> &nums, int limit) {
+    int low=1;
+    int high=INT16_MIN;
+    float divisor=INT16_MAX;
+    for(int i=0; i<nums.size(); i++){
+        high=max(high,nums[i]);
+    }
+    while(low<=high){
+        float mid=(low+high)/2;
+        int sum=0;
+        for(int i=0; i<nums.size(); i++){
+            sum+=ceil(nums[i]/mid);
+        }
+        cout<<low<<","<<high<<","<<mid<<","<<sum<<"\n";
+        if(sum<=limit){
+            divisor=min(divisor,mid);
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+    }
+    return divisor;
+}
+
+
+
+int findKthPositive(vector<int>& nums, int k) {
+    int low=0;
+    int high=nums.size()-1;
+    while(low<=high){
+        int mid=(low+high)/2;
+        int missings= nums[mid]-mid-1;
+        if(missings<k){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    return k+high+1;
+
+}
+
+
+
+int kthElement(vector<int> &a, vector<int>& b, int k) {
+
+}
 
 int main(){
-    vector<int> nums={3,6,7,11};
-    cout<< minimumRateToEatBananas(nums, 8);
+    vector<int> a = {2, 3, 6, 7, 9};
+    vector<int> b = {1, 4, 8, 10};
+    cout<<kthElement(a,b,8);
     return 0;
 }
