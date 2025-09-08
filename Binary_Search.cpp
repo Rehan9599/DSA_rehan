@@ -5,6 +5,7 @@
 #include <set>
 #include <algorithm>
 #include <cmath>
+#include <climits>
 using namespace std;
 
 
@@ -250,7 +251,7 @@ return -1;
 
 
 int findMin(vector<int> &nums)  {
-    int low=0, high=nums.size()-1,mini=INT16_MAX;
+    int low=0, high=nums.size()-1,mini=__INT16_MAX__;
      while(low<=high){
         int mid= (low+high)/2;
         if(nums[low]<=nums[mid]){
@@ -503,13 +504,6 @@ int findKthPositive(vector<int>& nums, int k) {
 
 
 
-int kthElement(vector<int> &a, vector<int>& b, int k) {
-
-}
-
 int main(){
-    vector<int> a = {2, 3, 6, 7, 9};
-    vector<int> b = {1, 4, 8, 10};
-    cout<<kthElement(a,b,8);
     return 0;
 }
