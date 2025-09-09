@@ -12,32 +12,69 @@ using namespace std;
 
 string removeOuterParentheses(string s) {
     int l= s.length();
-    set<int> p={};
-    vector<string>  ponda;
-    while(l>0){
-    p.insert(s.find(")(",l));
-    l--;
-    }
-    l= s.length();
-    for(auto x:p){
-        cout<<x<<"\n";
-    }
-    if(*p.begin()){
-        for(int i=0; i<p.size(); i++){
-            int c= *(p.begin());
-            ponda.push_back(s.substr(0,2));
+    string ans="";
+    int count=0;
+    for(int i=0;i<l;i++){
+        if(s[i]=='('){
+            if(count>0){
+                ans.append("(");
+            }
+            count++;
+        }
+        else if(s[i]==')'){
+            count--;
+            if(count>0){
+                ans.append(")");
+            }
         }
     }
-    else{
-        return s.substr(1,l-2);
-    }
-    return "io";
+    return ans;
 }
 
 
+
+string reverseWords(string s) {
+    if(s[0]==' ' && s[s.size()-1]==' '){
+        s=s.substr(1,s.size()-2);
+    }
+    cout<<s<<'\n';
+    int l=s.size();
+    string rev="";
+    int c=l-1;
+    for(int i=l-1;i>=0;i--){
+        if(s[i]==' '){
+            cout<<c<<','<<i<<"\n";
+            rev.append(s.substr(i+1,c-i));
+            rev.append(" ");
+            c=i-1;
+        }
+    }
+    cout<<c<<'\n';
+    if(c>0){
+        rev.append(s.substr(0,c+1));
+    }
+    return rev;
+} 
+
+string binaryToHexa(string s){
+    string zeroes;
+    if(s.size()%4!=0){
+        int siz=((s.size()/4)+1);
+        for(int i=0;i<siz;i++){
+            zeroes.append("0");
+        }
+        zeroes.append(s);
+    }
+    string ans;
+    for(int j=0; j<zeroes.size()-1; j+=4){
+        string num=zeroes.substr(j,4);
+    }
+    return zeroes;
+}
+
 int main(){
-    string s="()((())))()";
-    cout<<removeOuterParentheses(s);
+    string s="1010101011";
+    cout<<binaryToHexa(s);
 
     return 0;
 }
