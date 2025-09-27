@@ -97,29 +97,47 @@ string largeOddNum(string& s){
 
 string longestCommonPrefix(vector<string>& str){
     string ans="";
+    sort(str.begin(), str.end());
+    string first=str[0];
+    string last=str[str.size()-1];
     int count=0;
-    int j;
-    for(int i=1; i<str.size(); i++){
-        if(str[0].front()!=str[i].front()){
-                return ans;
-            }
-        for(j=1; j<str.size(); j++){
-            if(str[0].substr(0,j)!=str[i].substr(0,j)){
-                break;
-            }
-            else{
-                count++;
-            }
+    while(first[count]==last[count]){
+        if(count>first.size()-1 && count>last.size()-1){
+            break;
+        }
+        count++;
     }
-}
-    if(count==str.size()-1) ans.append(str[0].substr(0,j));
+    if(count>0) return first.substr(0,count);
     return ans;
 }
 
 
-int main(){
-    vector<string> str={"flowers" , "flow" , "fly", "flight"};
-    cout<<longestCommonPrefix(str);
+bool isomorphicString(string s, string t) {
+    string s1=s;
+    for(int i=0; i<s.size();i++){
+        int found=0;
+        for(int j=0; j<i; j++){
+            if(s1[i]==s[j]){
+                found=1;
+                s1[i]=s1[j];
+                break;
+            }
+        }
+        if(found==0){
+            s1[i]=t[i];
+        }
+    }
+    if(s1==t){
+       return true; 
+    }
+    else{
+        return false;
+    }
 
+}
+
+int main(){
+   string s = "apple" , t = "bbnbm";
+   cout<<isomorphicString(s,t);
     return 0;
 }
