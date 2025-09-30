@@ -107,18 +107,61 @@ ListNode* insertAtHead(ListNode* &head, int X) {
 }
 
 
+
+ListNode* middleOfLinkedList(ListNode* head) {
+    ListNode* f=head;
+    int count=0;
+    while(f!=NULL){
+            cout<<f->val<<"-->";
+            count++;
+            f=f->next;
+        }
+    f=head;
+    int mid=count/2;
+    for(int i=0; i<mid;i++){
+        f=f->next;
+    }
+    return f;
+}
+
+
+ListNode* reverseList(ListNode* head) {
+    ListNode* prev = nullptr;
+    ListNode* curr = head;
+    while (curr != nullptr) {
+        ListNode* nextTemp = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nextTemp;
+    }
+    ListNode* f=prev;
+    return prev;
+}
+
+
+
 int main(){
-    vector<int> arr={1,3,4};
-    DListNode* head=new DListNode(0);
-    DListNode* node0=new DListNode(1);
-    head->next=node0;
-    node0->prev=head;
-    DListNode* node1=new DListNode(2);
-    node0->next=node1;
-    node1->prev=node0;
-    DListNode* node2=new DListNode(3);
-    node1->next=node2;
-    node2->prev=node1;
-    cout<<reverseDLL(head);
+    // DListNode* head=new DListNode(0);
+    // DListNode* node0=new DListNode(1);
+    // head->next=node0;
+    // node0->prev=head;
+    // DListNode* node1=new DListNode(2);
+    // node0->next=node1;
+    // node1->prev=node0;
+    // DListNode* node2=new DListNode(3);
+    // node1->next=node2;
+    // node2->prev=node1;
+    ListNode* head= new ListNode(2);
+    ListNode* head1= new ListNode(9);
+    head->next=head1;
+    ListNode* head2= new ListNode(1);
+    head1->next=head2;
+    ListNode* head3= new ListNode(4);
+    head2->next=head3;
+    ListNode* head4= new ListNode(0);
+    head3->next=head4;
+    // ListNode* head5= new ListNode(4);
+    // head4->next=head5;
+    cout<<reverseList(head);
     return 0;
 }
