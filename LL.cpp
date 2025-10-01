@@ -49,6 +49,17 @@ struct DListNode
     }
 };
 
+
+
+void printLL(ListNode* head){
+    while(head!=NULL){
+        cout<<head->val<<"-->";
+        head=head->next;
+    }
+    cout<<"\n";
+}
+
+
 DListNode * deleteHead(DListNode* head) {
         head->next->prev=NULL;
         head=head->next;
@@ -126,9 +137,9 @@ ListNode* middleOfLinkedList(ListNode* head) {
 
 
 ListNode* reverseList(ListNode* head) {
-    ListNode* prev = nullptr;
+    ListNode* prev = NULL;
     ListNode* curr = head;
-    while (curr != nullptr) {
+    while (curr != NULL) {
         ListNode* nextTemp = curr->next;
         curr->next = prev;
         prev = curr;
@@ -138,6 +149,95 @@ ListNode* reverseList(ListNode* head) {
     return prev;
 }
 
+ListNode* reverseListR(ListNode* temp) {
+    if(temp->next==NULL || temp==NULL) return temp;
+    ListNode* newHead= reverseListR(temp->next);
+    ListNode* front=temp->next;
+    front->next=temp;
+    temp->next=NULL;
+    return newHead;
+}
+
+
+bool hasCycle(ListNode *head) {
+    ListNode* t=head;
+    // printLL(head);
+    while(t!=NULL){
+        ListNode* f=head;
+        while(f!=t){
+            if(t->next==f ){
+                return true;
+            }
+            f=f->next;
+        }
+        t=t->next;
+    }
+    return false;
+}
+
+ListNode *findStartingPoint(ListNode *head) {
+    ListNode* t=head;
+    while(t!=NULL){
+        ListNode* f=head;
+        while(f!=t){
+            if(t->next==f ){
+                return t->next;
+            }
+            f=f->next;
+        }
+        t=t->next;
+    }
+    return NULL;
+}
+
+int findLengthOfLoop(ListNode *head) {
+    ListNode* t=head;
+    ListNode* y=NULL;
+    while(t!=NULL){
+        ListNode* f=head;
+        while(f!=t){
+            if(t->next==f ){
+                y=f;
+                break;
+            }
+            f=f->next;
+        }
+        if(y!=NULL) break;
+        t=t->next;
+    }
+
+    int count=0;
+    while(y!=t){
+        count++;
+        y=y->next;
+    }
+    if(count==0) return 0;
+    return count+1;
+
+}
+
+
+bool isPalindrome(ListNode* head) {
+    ListNode* t=head, *f=head;
+    int count=0;
+    while(t!=NULL){
+        t=t->next;
+        count++;
+    }
+    t=f;
+    while(f!=NULL){
+        int c=count;
+        t=head;
+        while(c>1){
+            t=t->next;
+            c--;
+        }
+        if(f->val!=t->val) return false;
+        f=f->next;
+        count--;
+    }
+    return true;
+}
 
 
 int main(){
@@ -156,12 +256,12 @@ int main(){
     head->next=head1;
     ListNode* head2= new ListNode(1);
     head1->next=head2;
-    ListNode* head3= new ListNode(4);
+    ListNode* head3= new ListNode(1);
     head2->next=head3;
-    ListNode* head4= new ListNode(0);
+    ListNode* head4= new ListNode(9);
     head3->next=head4;
-    // ListNode* head5= new ListNode(4);
-    // head4->next=head5;
-    cout<<reverseList(head);
+    ListNode* head5= new ListNode(2);
+    head4->next=head5;
+    cout<<isPalindrome(head);
     return 0;
 }
