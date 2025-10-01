@@ -240,6 +240,64 @@ bool isPalindrome(ListNode* head) {
 }
 
 
+ListNode* oddEvenList(ListNode* head) {
+    ListNode* Oh=head, *Ot=head, *Eh=head->next, *Et=head->next;
+    while(Et!=NULL && Et->next!=NULL){
+        Ot->next=Ot->next->next;
+        Ot=Ot->next;
+        Et->next=Et->next->next;
+        Et=Et->next;
+    }
+    Ot->next=Eh;
+    printLL(Oh);
+    return Oh;
+}
+
+
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    int c=0;
+    ListNode* f=head;
+    while(f!=NULL){
+        c++;
+        f=f->next;
+    }
+    f=head;
+    int m=c-n-1;
+    while(m>0){
+        f=f->next;
+        m--;
+    }
+    if(m<0){
+        head=head->next;
+        printLL(head);
+        return head;
+    }
+    f->next=f->next->next;
+    printLL(head);
+    return head;
+}
+
+ListNode* deleteMiddle(ListNode* head) {
+     int c=0;
+    ListNode* f=head;
+    while(f!=NULL){
+        c++;
+        f=f->next;
+    }
+    f=head;
+    int m=c/2-1;
+    while(m>0){
+        f=f->next;
+        m--;
+    }
+    f->next=f->next->next;
+    return head;
+}
+
+
+
+
+
 int main(){
     // DListNode* head=new DListNode(0);
     // DListNode* node0=new DListNode(1);
@@ -251,17 +309,17 @@ int main(){
     // DListNode* node2=new DListNode(3);
     // node1->next=node2;
     // node2->prev=node1;
-    ListNode* head= new ListNode(2);
-    ListNode* head1= new ListNode(9);
+    ListNode* head= new ListNode(1);
+    ListNode* head1= new ListNode(2);
     head->next=head1;
-    ListNode* head2= new ListNode(1);
+    ListNode* head2= new ListNode(3);
     head1->next=head2;
-    ListNode* head3= new ListNode(1);
+    ListNode* head3= new ListNode(4);
     head2->next=head3;
-    ListNode* head4= new ListNode(9);
+    ListNode* head4= new ListNode(5);
     head3->next=head4;
-    ListNode* head5= new ListNode(2);
-    head4->next=head5;
-    cout<<isPalindrome(head);
+    // ListNode* head5= new ListNode(6);
+    // head4->next=head5;
+    cout<<deleteMiddle(head);
     return 0;
 }
