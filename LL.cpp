@@ -295,7 +295,71 @@ ListNode* deleteMiddle(ListNode* head) {
 }
 
 
+ListNode* sortList(ListNode* head) {
+    ListNode *f=head, *t=head;
+    while(f!=NULL){
+        t=head;
+        while(t!=NULL){
+            if(f->val<t->val){
+                swap(f->val,t->val);
+            }
+            t=t->next;
+        }
+        f=f->next;
+    }
+    return head;
+}
 
+
+ListNode *sortList012(ListNode *head) {
+    ListNode* f=head;
+    // int c0=0,c1=0,c2=0;
+    // while(f!=NULL){
+    //     if(f->val==0) c0++;
+    //     if(f->val==1) c1++;
+    //     if(f->val==2) c2++;
+    //     f=f->next;
+    // }
+    // f=head;
+    // while(c0>0){
+    //     f->val=0;
+    //     f=f->next;
+    //     c0--;
+    // }
+    // while(c1>0){
+    //     f->val=1;
+    //     f=f->next;
+    //     c1--;
+    // }
+    // while(c2>0){
+    //     f->val=2;
+    //     f=f->next;
+    //     c2--;
+    // }
+    // printLL(head);
+    ListNode zhDummy(-1), ohDummy(-1), thDummy(-1);
+    ListNode *zh = &zhDummy, *zt = zh, *oh = &ohDummy, *ot = oh, *th = &thDummy, *tt = th;
+    while(f!=NULL){
+        if(f->val==0){
+            zt->next=f;
+            zt=f;
+        }
+        else if(f->val==1){
+            ot->next=f;
+            ot=f;
+        }
+        else{
+            tt->next=f;
+            tt=f;
+        }
+        f=f->next;
+    }
+    zt->next=(oh->next)?oh->next:th->next;
+    ot->next=(th->next)?th->next:NULL;
+    tt->next=NULL;
+    printLL(zh->next);
+    return zt;
+}
 
 
 int main(){
@@ -310,16 +374,16 @@ int main(){
     // node1->next=node2;
     // node2->prev=node1;
     ListNode* head= new ListNode(1);
-    ListNode* head1= new ListNode(2);
+    ListNode* head1= new ListNode(0);
     head->next=head1;
-    ListNode* head2= new ListNode(3);
+    ListNode* head2= new ListNode(2);
     head1->next=head2;
-    ListNode* head3= new ListNode(4);
+    ListNode* head3= new ListNode(0);
     head2->next=head3;
-    ListNode* head4= new ListNode(5);
+    ListNode* head4= new ListNode(1);
     head3->next=head4;
-    // ListNode* head5= new ListNode(6);
+    // ListNode* head5= new ListNode(0);
     // head4->next=head5;
-    cout<<deleteMiddle(head);
+    cout<<sortList012(head);
     return 0;
 }
