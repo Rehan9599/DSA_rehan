@@ -362,6 +362,70 @@ ListNode *sortList012(ListNode *head) {
 }
 
 
+
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+    ListNode* f=headA;
+    ListNode* t=headB;
+    while(f!=NULL){
+        t=headB;
+        while(t!=NULL){
+            if(f==t){
+                cout<<f->val<<"\n";
+                return f;
+            }
+            t=t->next;
+        }
+        f=f->next;
+    }
+    return NULL;
+ }
+
+ListNode *addOne(ListNode *head) {
+    ListNode* f=head,*t=head;
+    int c=0,d=0,e=0;
+    while(f->next!=NULL){
+        c++;
+        if(f->val==9) e++;
+        f=f->next;
+    }
+
+    if(e==c){
+        while(t!=NULL){
+            t->val=0;
+            t=t->next;
+        }
+        t=head;
+        ListNode* dig= new ListNode(1);
+        dig->next=t;
+        printLL(dig);
+        return dig;
+    }
+    if(f->val!=9){
+        f->val+=1;
+        printLL(head);
+        return head;
+    }else{
+        while(c>0){
+        f->val=0;
+        f=head;
+        d=c;
+        while(d>1){
+            f=f->next;
+            d--;
+        }
+        if(f->val!=9){
+           f->val+=1;
+           printLL(head);
+           return head;
+        } 
+        c--;
+        } 
+    }
+    return NULL;
+}
+
+
+
 int main(){
     // DListNode* head=new DListNode(0);
     // DListNode* node0=new DListNode(1);
@@ -373,17 +437,28 @@ int main(){
     // DListNode* node2=new DListNode(3);
     // node1->next=node2;
     // node2->prev=node1;
-    ListNode* head= new ListNode(1);
-    ListNode* head1= new ListNode(0);
+    ListNode* head= new ListNode(9);
+    ListNode* head1= new ListNode(9);
     head->next=head1;
-    ListNode* head2= new ListNode(2);
+    ListNode* head2= new ListNode(9);
     head1->next=head2;
-    ListNode* head3= new ListNode(0);
+    ListNode* head3= new ListNode(9);
     head2->next=head3;
-    ListNode* head4= new ListNode(1);
-    head3->next=head4;
-    // ListNode* head5= new ListNode(0);
+    // ListNode* head4= new ListNode(5);
+    // head3->next=head4;
+    // ListNode* head5= new ListNode(6);
     // head4->next=head5;
-    cout<<sortList012(head);
+
+    // ListNode* headA=new ListNode(9);
+    // ListNode* headB=new ListNode(8);
+    // ListNode* headC=new ListNode(7);
+    // ListNode* headD=new ListNode(6);
+    // headA->next= headB;
+    // headB->next=headC;
+    // headC->next=headD;
+    // headD->next=head3;
+    // printLL(head);
+    // printLL(headA);
+    cout<<addOne(head);
     return 0;
 }
