@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <climits>
+#include <stack>
 using namespace std;
 
 struct ListNode
@@ -425,6 +426,39 @@ ListNode *addOne(ListNode *head) {
 }
 
 
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    ListNode* f=l1, *t=l2;
+    int c=0,d=0;
+    while(f!=NULL){
+        c++;
+        f=f->next;
+    }
+    while(t!=NULL){
+        d++;
+        t=t->next;
+    }
+    f=l1;
+    t=l2;
+    while(f!=NULL && t!=NULL){
+        if(c>d){
+            f->val=f->val+t->val;
+            if(f->val >10){
+                f->val-=10;
+                f->next->val++;
+            }
+        }else{
+            t->val=t->val+f->val;
+            if(t->val >10){
+                t->val-=10;
+                t->next->val++;
+            }
+        }
+        f=f->next;
+        t=t->next;
+    }
+    c>d ? printLL(l1) : printLL(l2);
+}
+
 
 int main(){
     // DListNode* head=new DListNode(0);
@@ -437,28 +471,27 @@ int main(){
     // DListNode* node2=new DListNode(3);
     // node1->next=node2;
     // node2->prev=node1;
-    ListNode* head= new ListNode(9);
-    ListNode* head1= new ListNode(9);
+    ListNode* head= new ListNode(8);
+    ListNode* head1= new ListNode(8);
     head->next=head1;
-    ListNode* head2= new ListNode(9);
+    ListNode* head2= new ListNode(1);
     head1->next=head2;
-    ListNode* head3= new ListNode(9);
-    head2->next=head3;
+    // ListNode* head3= new ListNode(9);
+    // head2->next=head3;
     // ListNode* head4= new ListNode(5);
     // head3->next=head4;
     // ListNode* head5= new ListNode(6);
     // head4->next=head5;
 
-    // ListNode* headA=new ListNode(9);
-    // ListNode* headB=new ListNode(8);
-    // ListNode* headC=new ListNode(7);
-    // ListNode* headD=new ListNode(6);
-    // headA->next= headB;
-    // headB->next=headC;
+    ListNode* headA=new ListNode(3);
+    ListNode* headB=new ListNode(6);
+    ListNode* headC=new ListNode(7);
+    ListNode* headD=new ListNode(6);
+    headA->next= headB;
+    headB->next=headC;
     // headC->next=headD;
-    // headD->next=head3;
-    // printLL(head);
-    // printLL(headA);
-    cout<<addOne(head);
+    printLL(head);
+    printLL(headA);
+    cout<<addTwoNumbers(head,headA);
     return 0;
 }
