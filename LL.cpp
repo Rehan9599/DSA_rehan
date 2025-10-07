@@ -308,6 +308,7 @@ ListNode* sortList(ListNode* head) {
         }
         f=f->next;
     }
+    printLL(head);
     return head;
 }
 
@@ -476,12 +477,12 @@ int main(){
     head->next=head1;
     ListNode* head2= new ListNode(1);
     head1->next=head2;
-    // ListNode* head3= new ListNode(9);
-    // head2->next=head3;
-    // ListNode* head4= new ListNode(5);
-    // head3->next=head4;
-    // ListNode* head5= new ListNode(6);
-    // head4->next=head5;
+    ListNode* head3= new ListNode(9);
+    head2->next=head3;
+    ListNode* head4= new ListNode(5);
+    head3->next=head4;
+    ListNode* head5= new ListNode(6);
+    head4->next=head5;
 
     ListNode* headA=new ListNode(3);
     ListNode* headB=new ListNode(6);
@@ -489,9 +490,11 @@ int main(){
     ListNode* headD=new ListNode(6);
     headA->next= headB;
     headB->next=headC;
-    // headC->next=headD;
+    headC->next=headD;
     printLL(head);
     printLL(headA);
-    cout<<addTwoNumbers(head,headA);
+    cout<<sortList(head);
+    cout<<"\n";
+    cout<<sortList(headA);
     return 0;
 }
