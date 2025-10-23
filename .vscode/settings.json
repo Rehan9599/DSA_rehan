@@ -3,5 +3,19 @@
         "*.ejs": "html",
         "iostream": "cpp",
         "ostream": "cpp"
+    },
+    // Disable inline suggestions and completions from GitHub Copilot in this workspace
+    // Use object-form keys to match the settings schema
+    "github.copilot": {
+        "enable": "off",
+        "inlineSuggest": {
+            "enable": false
+        }
+    },
+    "github.copilot.enable": {
+        "0": "o",
+        "1": "f",
+        "2": "f",
+        "*": false
     }
 }

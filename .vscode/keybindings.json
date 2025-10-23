@@ -1,0 +1,8 @@
+[
+    {
+        "key": "ctrl+shift+R",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Compile and Run All C++ Files",
+        "when": "editorTextFocus && editorLangId == 'cpp'"
+    }
+]

@@ -4,10 +4,11 @@
         {
             "label": "Compile and Run All C++ Files",
             "type": "shell",
-            "command": "bash.exe",
+            // Use cmd.exe on Windows to run g++ and then the produced .exe
+            "command": "cmd.exe",
             "args": [
-                "-c",
-                "g++ \"${file}\" -o \"${fileDirname}/${fileBasenameNoExtension}.exe\" && \"${fileDirname}/${fileBasenameNoExtension}.exe\""
+                "/c",
+                "g++ \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" && \"${fileDirname}\\${fileBasenameNoExtension}.exe\""
             ],
             "group": {
                 "kind": "build",
