@@ -44,7 +44,7 @@ double myPow1(double x, int n) {
     return res;
 }
 
-double myPow2(double x, int n,int res) {
+double myPow2(double x, int n,int res=1) {
     if(n==0) return res;
     if(n%2!=0){
         return myPow2(x,n-1,res*x);
@@ -67,8 +67,23 @@ int countGoodNumbers(int ind,int n) {
     return res;
 }
 
+int countGoodNumbers1(int n) {
+    int ind=0;
+    int res=1;
+    while(ind!=n){
+      if(ind%2==0){
+        res*=5;
+    }
+    else{
+        res*=4;
+    }
+    ind++;  
+    }
+    return res;
+}
+
 
 int main(){
-    cout<<myPow2(2,10,1);
+    cout<<countGoodNumbers1(2);
     return 0;
 }
