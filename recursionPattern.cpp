@@ -82,8 +82,59 @@ int countGoodNumbers1(int n) {
     return res;
 }
 
+void insert(stack<int> &st, int top){
+    if(st.empty()||st.top()<=top){
+        st.push(top);
+        return;
+    }
+    int val=st.top();
+    st.pop();
+    insert(st,top);
+    st.push(val);
+}
+
+void sortStack(stack<int> &st){
+    if(st.empty()) return;
+    int top=st.top();
+    st.pop();
+    sortStack(st);
+    insert(st,top);
+}
+
+void insertAtBot(stack<int> &st,int top){
+    if(st.empty()){
+        st.push(top);
+        return;
+    }
+    int val = st.top();
+    st.pop();
+    insertAtBot(st,top);
+
+    st.push(val);
+}
+
+void reverseStack(stack<int> &st) {
+       if(st.empty()) return;
+       int top=st.top();
+       st.pop();
+       reverseStack(st);
+       insertAtBot(st,top);
+    }
+
 
 int main(){
-    cout<<countGoodNumbers1(2);
+    stack<int> st;
+    st.push(40);
+    st.push(-1);
+    st.push(-3);
+    st.push(20);
+
+    reverseStack(st);
+    
+    for(int i=0;i<4;i++){
+        cout<<st.top();
+        st.pop();
+    }
+
     return 0;
 }

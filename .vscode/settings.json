@@ -2,7 +2,8 @@
     "files.associations": {
         "*.ejs": "html",
         "iostream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "stack": "cpp"
     },
     // Disable inline suggestions and completions from GitHub Copilot in this workspace
     // Use object-form keys to match the settings schema
