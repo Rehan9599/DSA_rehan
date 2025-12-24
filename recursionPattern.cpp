@@ -166,22 +166,16 @@ vector<string> generateParenthesis(int n, vector<string> &vs,const string &s) {
 }
 
 
-vector<vector<int> > powerSet(vector<int>& nums,vector<vector<int>>& pSet, int n ,vector<int>& s, int r) {
-    if(pSet.size()==pow(2,n)){
-        return pSet;
-    }
-
-    if(r>=n){
-        s={};
-        return pSet;
-    } 
-    if(s.size()<=n){
+vector<vector<int> > powerSet(vector<int>& nums,vector<vector<int>>& pSet, int n,vector<int>& s) {
+    if(n==nums.size()){
         pSet.push_back(s);
+        return pSet;
     }
-    s.push_back(nums[r]);
-    powerSet(nums,pSet,n,s,r+1);
-    s.push_back(nums[r]);
-    powerSet(nums,pSet,n,s,r+2);
+    powerSet(nums,pSet,n+1,s);
+    s.push_back(nums[n]);
+
+    powerSet(nums,pSet,n+1,s);
+    s.pop_back();
     return pSet;   
 }
 
@@ -191,9 +185,8 @@ vector<vector<int> > powerSet(vector<int>& nums,vector<vector<int>>& pSet, int n
 int main(){
     vector<int> nums={1,2};
     vector<vector<int>>pSet={};
-    int n=nums.size();
     vector<int> s={};
-    for(vector<int> x: powerSet(nums,pSet,n,s,0)){
+    for(vector<int> x: powerSet(nums,pSet,0,s)){
         cout<<"[";
         for(int y : x){
             cout<<y<<",";
