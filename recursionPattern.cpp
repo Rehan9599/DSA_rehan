@@ -122,19 +122,83 @@ void reverseStack(stack<int> &st) {
     }
 
 
-int main(){
-    stack<int> st;
-    st.push(40);
-    st.push(-1);
-    st.push(-3);
-    st.push(20);
 
-    reverseStack(st);
-    
-    for(int i=0;i<4;i++){
-        cout<<st.top();
-        st.pop();
+vector<string> generateBinaryStrings(int n, vector<string> &vs,const string &s) {
+    if(s.length()==n){
+        vs.push_back(s);
+        return vs;
+    };
+    generateBinaryStrings(n,vs,s+"0");
+    if(s.empty()|| s.back()!='1'){
+        generateBinaryStrings(n,vs,s+"1");
+    }
+    return vs;
+}
+
+
+vector<string> generateParenthesis(int n, vector<string> &vs,const string &s) {
+    if(s.length()==2*n){
+        vs.push_back(s);
+        return vs;
+    };
+    if(s.empty()){
+        generateParenthesis(n,vs,s+"(");
+    }else{
+        int z=0;
+        for(char x : s){
+            if(x==')') z++;
+        }
+        int c=0;
+        for(char x : s){
+            if(x=='(') c++;
+        }
+
+        if(c!=z && z!=n){
+            generateParenthesis(n,vs,s+")");
+        }
+        
+        if(c!=n){
+           generateParenthesis(n,vs,s+"("); 
+        }   
+    }
+    return vs;
+        
+}
+
+
+vector<vector<int> > powerSet(vector<int>& nums,vector<vector<int>>& pSet, int n ,vector<int>& s, int r) {
+    if(pSet.size()==pow(2,n)){
+        return pSet;
     }
 
+    if(r>=n){
+        s={};
+        return pSet;
+    } 
+    if(s.size()<=n){
+        pSet.push_back(s);
+    }
+    s.push_back(nums[r]);
+    powerSet(nums,pSet,n,s,r+1);
+    s.push_back(nums[r]);
+    powerSet(nums,pSet,n,s,r+2);
+    return pSet;   
+}
+
+
+
+
+int main(){
+    vector<int> nums={1,2};
+    vector<vector<int>>pSet={};
+    int n=nums.size();
+    vector<int> s={};
+    for(vector<int> x: powerSet(nums,pSet,n,s,0)){
+        cout<<"[";
+        for(int y : x){
+            cout<<y<<",";
+        }
+        cout<<"],  ";
+    }
     return 0;
 }
