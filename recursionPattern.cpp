@@ -180,18 +180,87 @@ vector<vector<int> > powerSet(vector<int>& nums,vector<vector<int>>& pSet, int n
 }
 
 
+int countSubsequenceWithTargetSum(vector<int>& nums, int k, vector<int>& s, int n, int c){
+    //     vector<vector<int>>pSet={};
+    //     vector<int> s={};
+    //     int c=0;
+    // 	for(vector<int> x: powerSet(nums,pSet,0,s)){
+    //     int s=0;
+    //     for(int y : x){
+    //         s+=y;
+    //     }
+    //     if(s==k){
+    //         c++;
+    //         cout<<"[";
+    //     for(int y : x){
+
+    //         cout<<y<<",";
+    //     }
+    //     cout<<"],  ";
+    //     }  
+    // }
+
+    if(n==nums.size()){
+        int m=0;
+        for(int x: s){
+            m+=x;
+        }
+        if(m==k){
+            c++;
+        }
+        
+        return c;
+    }
+    
+    c = countSubsequenceWithTargetSum(nums, k , s, n+1, c);
+    s.push_back(nums[n]);
+
+    c = countSubsequenceWithTargetSum(nums, k , s, n+1, c);
+    s.pop_back();
+
+    return c;
+}
+
+bool checkSubsequenceSum(vector<int>& nums, int k) {
+    vector<int> s={};
+   if(countSubsequenceWithTargetSum(nums,k,s,0, 0) >0){
+    return true;
+   }
+   return false;
+}
+
+
+void findcombinationSum(vector<int>& nums, int k,int n, vector<vector<int>>& res, vector<int>& s) {
+    if(n==nums.size()){
+        if(k==0){
+           res.push_back(s);
+        }
+        return;
+    }
+    if(nums[n]<=k){
+        s.push_back(nums[n]);
+        findcombinationSum(nums,k-nums[n], n,res,s);
+        s.pop_back();
+    }
+    findcombinationSum(nums,k,n+1,res,s);
+}
+
+ vector<vector<int>> combinationSum(vector<int>& nums, int k) {
+    vector<vector<int>> res={};
+    vector<int> s={};
+    findcombinationSum(nums,k,0,res,s);
+    return res;
+}
 
 
 int main(){
-    vector<int> nums={1,2};
-    vector<vector<int>>pSet={};
-    vector<int> s={};
-    for(vector<int> x: powerSet(nums,pSet,0,s)){
+    vector<int> nums={2,3,5,4};
+    for(vector<int> x :combinationSum(nums,7)){
         cout<<"[";
-        for(int y : x){
+        for(int y:x){
             cout<<y<<",";
         }
-        cout<<"],  ";
+        cout<<"]"<<", ";
     }
     return 0;
 }
