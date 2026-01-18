@@ -245,17 +245,43 @@ void findcombinationSum(vector<int>& nums, int k,int n, vector<vector<int>>& res
     findcombinationSum(nums,k,n+1,res,s);
 }
 
- vector<vector<int>> combinationSum(vector<int>& nums, int k) {
+vector<vector<int>> combinationSum(vector<int>& nums, int k) {
     vector<vector<int>> res={};
     vector<int> s={};
     findcombinationSum(nums,k,0,res,s);
     return res;
 }
 
+void findcombinationSum2(vector<int>& nums, int k,int n, set<vector<int>>& res, vector<int>& s) {
+    if(n==nums.size()){
+        if(k==0){
+           res.insert(s);
+        }
+        return;
+    }
+    if(nums[n]<=k){
+        s.push_back(nums[n]);
+        findcombinationSum2(nums,k-nums[n],n+1,res,s);
+        s.pop_back();
+    }
+    findcombinationSum2(nums,k,n+1,res,s);
+}
+
+
+vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+    set<vector<int>> res={};
+    vector<int> s={};
+    sort(candidates.begin(), candidates.end());
+    findcombinationSum2(candidates,target,0,res,s);
+    vector<vector<int>> res1(res.begin(), res.end());
+    return res1;
+}
+
+
 
 int main(){
-    vector<int> nums={2,3,5,4};
-    for(vector<int> x :combinationSum(nums,7)){
+    vector<int> nums={2,1,2,7,6,1,5};
+    for(vector<int> x :combinationSum2(nums,8)){
         cout<<"[";
         for(int y:x){
             cout<<y<<",";
@@ -264,3 +290,6 @@ int main(){
     }
     return 0;
 }
+
+
+
