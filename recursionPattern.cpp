@@ -119,7 +119,7 @@ void reverseStack(stack<int> &st) {
        st.pop();
        reverseStack(st);
        insertAtBot(st,top);
-    }
+}
 
 
 
@@ -166,7 +166,7 @@ vector<string> generateParenthesis(int n, vector<string> &vs,const string &s) {
 }
 
 
-vector<vector<int> > powerSet(vector<int>& nums,vector<vector<int>>& pSet, int n,vector<int>& s) {
+vector<vector<int>> powerSet(vector<int>& nums,vector<vector<int>>& pSet, int n,vector<int>& s) {
     if(n==nums.size()){
         pSet.push_back(s);
         return pSet;
@@ -279,9 +279,79 @@ vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
 
 
 
+vector<int> powerSetSum(vector<int>& nums,vector<int>& psS, int n,vector<int>& s) {
+    if(n==nums.size()){
+        int sum=0;
+        for(int y:s){
+            sum+=y;
+        }
+        psS.push_back(sum);
+        return psS;
+    }
+    powerSetSum(nums,psS,n+1,s);
+    s.push_back(nums[n]);
+
+    powerSetSum(nums,psS,n+1,s);
+    s.pop_back();
+    return psS;   
+}
+
+vector<int> subsetSums(vector<int>& nums) {
+    vector<vector<int>> pSet;
+    vector<int> s;
+    vector<int> psS;
+    powerSetSum(nums,psS,0,s);
+    return psS;
+}
+
+set<vector<int>> powerSetD(vector<int>& nums,set<vector<int>>& pSet, int n,vector<int>& s) {
+    if(n==nums.size()){
+        pSet.insert(s);
+        return pSet;
+    }
+    powerSetD(nums,pSet,n+1,s);
+    s.push_back(nums[n]);
+
+    powerSetD(nums,pSet,n+1,s);
+    s.pop_back();
+    return pSet;   
+}
+ vector<vector<int> > subsetsWithDup(vector<int>& nums) {
+    set<vector<int>> pSet;
+    vector<int> s;
+    powerSetD(nums,pSet,0,s);
+    vector<vector<int> > pSetD(pSet.begin(), pSet.end());
+    return pSetD;
+ }
+
+
+void findcombinationSum3(vector<int>& nums, int k,int n, vector<vector<int>>& res, vector<int>& s,int m) {
+    if(n==nums.size()){
+        if(k==0 && s.size()==m){
+           res.push_back(s);
+        }
+        return;
+    }
+    if(nums[n]<=k){
+        s.push_back(nums[n]);
+        findcombinationSum3(nums,k-nums[n],n+1,res,s,m);
+        s.pop_back();
+    }
+    findcombinationSum3(nums,k,n+1,res,s,m);
+}
+
+vector<vector<int> > combinationSum3(int k, int n) {
+    vector<vector<int>> res;
+    vector<int> s;
+    vector<int> nums={1,2,3,4,5,6,7,8,9};
+    findcombinationSum3(nums,k,0,res,s,n);
+    return res;
+}
+
+
 int main(){
-    vector<int> nums={2,1,2,7,6,1,5};
-    for(vector<int> x :combinationSum2(nums,8)){
+    vector<int> nums={1,2,3,4,5,6,7,8,9};
+    for(vector<int> x :combinationSum3(9,3)){
         cout<<"[";
         for(int y:x){
             cout<<y<<",";
