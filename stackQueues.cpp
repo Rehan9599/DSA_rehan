@@ -8,6 +8,7 @@
 #include <climits>
 #include <stack>
 #include <queue>
+#include <map>
 using namespace std;
 
 class ArrayStack {
@@ -234,38 +235,111 @@ public:
 
 
 class LinkedListQueue {
+private:
+    int s;
+    ListNode *head;
 public:
     LinkedListQueue() {
+        head=NULL;
+        s=0;
     }
-    
     void push(int x) {
-   
+        s++;
+        ListNode* node=new ListNode(x);
+        if(head==NULL){
+            head=node;
+        }
+        else{
+            ListNode* n=head;
+            while(n->next!=NULL){
+                n=n->next;
+            }
+            n->next=node;
+        }
     }
     
     int pop() {
-  
+        if(head!=NULL){
+            int v=head->val;
+            s>=2?head->next=head->next->next: head->next=NULL;
+            return v;
+        }else{
+            return 0;
+        }
     }
     
     int peek() {
-    
+       return head==NULL ? 0: head->val;
     }
     
     bool isEmpty() {
-  
+        return head==NULL;
     }
 };
 
+
+bool isValid(string str) {
+    stack<char> open;
+    for(int i=0; i<str.size(); i++){
+        char x=str[i];
+        if(x == '(' || x== '{' || x== '['){
+            open.push(x);
+        }
+        else{
+            if(open.top()+x=='('+')'||'{'+'}'||'['+']'){
+                open.pop();
+            }
+            else{
+                return false;
+            }
+        }
+    }
+    return open.empty();
+}
+
+
+string infixToPostfix(string s) {
+    stack<char> operat;
+    map<char,int> mpp={
+        {'+',0}, 
+        {'-',0},
+        {'*',1},
+        {'/',1},
+        {'^',2},
+    };
+    string expr;
+    for(char x: s){
+        if(x<='z' && x>='a'){
+            expr+=x;
+        }else if(x=='('){
+               operat.push(x); 
+        }else if(x==')'){
+                while(operat.top()!='(' && !operat.empty()){
+                    expr+=operat.top();
+                    operat.pop();
+                }
+                operat.pop();
+        }else{
+            while(!operat.empty()&& operat.top()!='(' 
+                    && (mpp[operat.top()]>mpp[x] ||
+                    (mpp[operat.top()]==mpp[x] && !(x == '^'))
+                )){
+                expr+=operat.top();
+                operat.pop();
+            }
+            operat.push(x);
+        }
+    }
+    while(!operat.empty()){
+        expr+=operat.top();
+        operat.pop();
+    }
+    return expr;    
+}
+
+
 int main(){
-LinkedListStack stack =  LinkedListStack();
-
-stack.push(3);
-
-stack.push(7);
-
-cout<<stack.pop(); // returns 7
-
-cout<<stack.top(); // returns 3
-
-cout<<stack.isEmpty(); // returns false 
+cout<<infixToPostfix("a+b*(c^d-e)^(f+g*h)-i");
     return 0;
 }
+
