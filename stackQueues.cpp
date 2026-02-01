@@ -141,14 +141,105 @@ public:
 class StackQueue {
     private:
 int s;
-stack<int> st;
+stack<int> st, sts;
 public:
     StackQueue() {
         s=10;
     }
     
     void push(int x) {
+        int t=st.size();
+        for(int i=0; i<t; i++){
+            sts.push(st.top());
+            st.pop();
+        }
         st.push(x);
+        for(int i=0; i<t; i++){
+            st.push(sts.top());
+            sts.pop();
+        }
+    }
+    
+    int pop() {
+        int v=st.top();
+        st.pop();
+        return v;
+    }
+    
+    int peek() {
+        return st.top();
+    }
+    
+    bool isEmpty() {
+        return st.empty();
+    }
+};
+
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode(int data1)
+    {
+        val = data1;
+        next = NULL;
+    }
+};
+class LinkedListStack {
+private:
+    int s;
+    ListNode *head;
+public:
+    LinkedListStack() {
+        head=NULL;
+        s=0;
+    }
+    void push(int x) {
+        ListNode* node=new ListNode(x);
+        if(head==NULL){
+            head=node;
+        }
+        else{
+            ListNode* n=head;
+            while(n->next!=NULL){
+                n=n->next;
+            }
+            n->next=node;
+        }
+    }
+    
+    int pop() {
+        ListNode* n=head;
+        while(n->next->next!=NULL){
+            n=n->next;
+        }
+        int v= n->next->val;
+        n->next=NULL;
+        return v;
+    }
+    
+    int top() {
+        ListNode* n=head;
+        while(n->next!=NULL){
+            n=n->next;
+        }
+        return n->val;
+    }
+    
+    bool isEmpty() {
+        if(head==NULL) return true;
+        return false;
+    }
+};
+
+
+class LinkedListQueue {
+public:
+    LinkedListQueue() {
+    }
+    
+    void push(int x) {
+   
     }
     
     int pop() {
@@ -163,17 +254,18 @@ public:
   
     }
 };
+
 int main(){
-    QueueStack stack =  QueueStack();
+LinkedListStack stack =  LinkedListStack();
 
-stack.push(4);
+stack.push(3);
 
-stack.push(8);
+stack.push(7);
 
-cout<<stack.pop(); // returns 8
-cout<<"\n";
-cout<<stack.top(); // returns 4
-cout<<"\n";
-cout<<stack.isEmpty(); // returns false
+cout<<stack.pop(); // returns 7
+
+cout<<stack.top(); // returns 3
+
+cout<<stack.isEmpty(); // returns false 
     return 0;
 }
