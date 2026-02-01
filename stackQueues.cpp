@@ -9,6 +9,7 @@
 #include <stack>
 #include <queue>
 #include <map>
+#include <string>
 using namespace std;
 
 class ArrayStack {
@@ -337,9 +338,27 @@ string infixToPostfix(string s) {
     return expr;    
 }
 
-
+string prefixToInfix(string s) {
+    string rs(s.rbegin(), s.rend());
+    stack<string> expr;
+    string result;
+    for(char x:rs){
+        if(x=='+'||x=='-'||x=='*'||x=='/'||x=='^'){
+            string op1=expr.top();
+            expr.pop();
+            string op2=expr.top();
+            expr.pop();
+            string inf="("+op1+x+op2+")";
+            expr.push(inf);
+        }else{
+            expr.push(string(1,x));
+        }
+    }
+    result+=expr.top();
+    return result;
+}
 int main(){
-cout<<infixToPostfix("a+b*(c^d-e)^(f+g*h)-i");
+cout<<prefixToInfix("*+ab-cd");
     return 0;
 }
 
