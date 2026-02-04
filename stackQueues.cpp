@@ -287,7 +287,9 @@ bool isValid(string str) {
             open.push(x);
         }
         else{
-            if(open.top()+x=='('+')'||'{'+'}'||'['+']'){
+            if(open.empty()) return false;
+            char t = open.top();
+            if((t=='(' && x==')') || (t=='{' && x=='}') || (t=='[' && x==']')){
                 open.pop();
             }
             else{
@@ -315,11 +317,11 @@ string infixToPostfix(string s) {
         }else if(x=='('){
                operat.push(x); 
         }else if(x==')'){
-                while(operat.top()!='(' && !operat.empty()){
+                while(!operat.empty() && operat.top()!='('){
                     expr+=operat.top();
                     operat.pop();
                 }
-                operat.pop();
+                if(!operat.empty()) operat.pop();
         }else{
             while(!operat.empty()&& operat.top()!='(' 
                     && (mpp[operat.top()]>mpp[x] ||
@@ -357,8 +359,108 @@ string prefixToInfix(string s) {
     result+=expr.top();
     return result;
 }
+
+ string prefixToPostfix(const string& s) {
+    string rs(s.rbegin(), s.rend());
+    stack<string> expr;
+    string result;
+    for(char x:rs){
+        if(x=='+'||x=='-'||x=='*'||x=='/'||x=='^'){
+            string op1=expr.top();
+            expr.pop();
+            string op2=expr.top();
+            expr.pop();
+            string inf=op1+op2+x;
+            expr.push(inf);
+        }else{
+            expr.push(string(1,x));
+        }
+    }
+    result+=expr.top();
+    return result;
+ }   
+
+string postToPre(string postfix) {
+    stack<string> expr;
+    string result;
+    for(char x:postfix){
+        if(x=='+'||x=='-'||x=='*'||x=='/'||x=='^'){
+            string op1=expr.top();
+            expr.pop();
+            string op2=expr.top();
+            expr.pop();
+            string inf=x+op2+op1;
+            expr.push(inf);
+        }else{
+            expr.push(string(1,x));
+        }
+    }
+    result+=expr.top();
+    return result;
+}
+
+
+string postToInfix(string postExp) {
+    stack<string> expr;
+    string result;
+    for(char x:postExp){
+        if(x=='+'||x=='-'||x=='*'||x=='/'||x=='^'){
+            string op1=expr.top();
+            expr.pop();
+            string op2=expr.top();
+            expr.pop();
+            string inf="("+op2+x+op1+")";
+            expr.push(inf);
+        }else{
+            expr.push(string(1,x));
+        }
+    }
+    result+=expr.top();
+    return result;
+}
+
+string infixToPrefix(const string& s) {
+    stack<char> operat;
+    string rs(s.rbegin(), s.rend());
+    map<char,int> mpp={
+        {'+',0}, 
+        {'-',0},
+        {'*',1},
+        {'/',1},
+        {'^',2},
+    };
+    string expr="";
+    for(char x: rs){
+        if(x<='z' && x>='a'){
+            expr=x+expr;
+        }else if(x==')'){
+               operat.push(x);
+        }else if(x=='('){
+                while(!operat.empty() && operat.top()!=')'){
+                    expr=operat.top()+expr;
+                    operat.pop();
+                }
+                if(!operat.empty()) operat.pop();
+        }else{
+            while(!operat.empty()&& operat.top()!=')' 
+                    && (mpp[operat.top()]>mpp[x] ||
+                    (mpp[operat.top()]==mpp[x] && !(x == '^'))
+                )){
+                expr=operat.top()+expr;
+                operat.pop();
+            }
+            operat.push(x);
+        }
+    }
+    while(!operat.empty()){
+        expr=operat.top()+expr;
+        operat.pop();
+    }
+    return expr;
+}
+
 int main(){
-cout<<prefixToInfix("*+ab-cd");
+cout<<infixToPrefix("a+b*c");
     return 0;
 }
 
