@@ -459,8 +459,60 @@ string infixToPrefix(const string& s) {
     return expr;
 }
 
+//monotonic stack 
+
+vector<int> nextLargerElement(vector<int> arr) {
+    stack<int> st;
+    vector<int> nge;
+    for(int i =arr.size()-1; i>=0;i--){
+        if(st.empty()){
+            st.push(arr[i]);
+            nge.push_back(-1);
+        }else if(arr[i]<st.top()){
+            nge.push_back(st.top());
+            st.push(arr[i]);
+        }else{
+            while(!st.empty() && st.top()<=arr[i]){
+                st.pop();
+            }
+            st.empty()? nge.push_back(-1):nge.push_back(st.top());
+            st.push(arr[i]);
+        }
+    }
+    reverse(nge.begin(), nge.end());
+    return nge;
+}
+
+
+vector<int> nextGreaterElements(vector<int> &arr) {
+    stack<int> st;
+    vector<int> nge;
+    for(int i =arr.size()-1; i>=0;i--){
+        st.push(arr[i]);
+    }
+    for(int i =arr.size()-1; i>=0;i--){
+        if(st.empty()){
+            st.push(arr[i]);
+            nge.push_back(-1);
+        }else if(arr[i]<st.top()){
+            nge.push_back(st.top());
+            st.push(arr[i]);
+        }else{
+            while(!st.empty() && st.top()<=arr[i]){
+                st.pop();
+            }
+            st.empty()? nge.push_back(-1):nge.push_back(st.top());
+            st.push(arr[i]);
+        }
+    }
+    reverse(nge.begin(), nge.end());
+    return nge;
+}
 int main(){
-cout<<infixToPrefix("a+b*c");
+    vector<int> arr={3, 10, 4, 2, 1, 2, 6, 1, 7, 2, 9};
+for(auto x: nextGreaterElements(arr)){
+    cout<<x<<" ";
+}
     return 0;
 }
 
