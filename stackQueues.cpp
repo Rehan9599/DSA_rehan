@@ -461,30 +461,6 @@ string infixToPrefix(const string& s) {
 
 //monotonic stack 
 
-vector<int> nextLargerElement(vector<int> arr) {
-    stack<int> st;
-    vector<int> nge;
-    for(int i =arr.size()-1; i>=0;i--){
-        if(st.empty()){
-            st.push(arr[i]);
-            nge.push_back(-1);
-        }else if(arr[i]<st.top()){
-            nge.push_back(st.top());
-            st.push(arr[i]);
-        }else{
-            while(!st.empty() && st.top()<=arr[i]){
-                st.pop();
-            }
-            st.empty()? nge.push_back(-1):nge.push_back(st.top());
-            st.push(arr[i]);
-        }
-    }
-    reverse(nge.begin(), nge.end());
-    return nge;
-}
-
-
-
 vector<int> nextGreaterElements(vector<int> &arr) {
     stack<int> st;
     vector<int> nge;
@@ -510,28 +486,87 @@ vector<int> nextGreaterElements(vector<int> &arr) {
     return nge;
 }
 
-vector<int> nextSmallerElements(const vector<int>& arr) {
+vector<int> nextLargerElement(vector<int> arr) {
     stack<int> st;
     vector<int> nge;
     for(int i =arr.size()-1; i>=0;i--){
-        if(st.empty()){
-            st.push(arr[i]);
-            nge.push_back(-1);
-        }else if(arr[i]>st.top()){
-            nge.push_back(st.top());
-            st.push(arr[i]);
-        }else{
-            while(!st.empty() && st.top()>=arr[i]){
+            while(!st.empty() && st.top()<arr[i]){
                 st.pop();
             }
             st.empty()? nge.push_back(-1):nge.push_back(st.top());
             st.push(arr[i]);
-        }
     }
     reverse(nge.begin(), nge.end());
     return nge;
 }
 
+vector<int> nextSmallerElements(const vector<int>& arr) {
+    stack<int> st;
+    vector<int> nge;
+    for(int i =arr.size()-1; i>=0;i--){
+            while(!st.empty() && st.top()>arr[i]){
+                st.pop();
+            }
+            st.empty()? nge.push_back(-1):nge.push_back(st.top());
+            st.push(arr[i]);
+    }
+    reverse(nge.begin(), nge.end());
+    return nge;
+}
+vector<int> prevLargerElement(vector<int> arr) {
+    stack<int> st;
+    vector<int> nge;
+    for(int i =arr.size()-1; i>=0;i--){
+            while(!st.empty() && st.top()>=arr[i]){
+                st.pop();
+            }
+            st.empty()? nge.push_back(-1):nge.push_back(st.top());
+            st.push(arr[i]);
+    }
+    reverse(nge.begin(), nge.end());
+    return nge;
+}
+vector<int> prevSmallerElements(const vector<int>& arr) {
+    stack<int> st;
+    vector<int> nge;
+    for(int i =arr.size()-1; i>=0;i--){
+            while(!st.empty() && st.top() > arr[i]){
+                st.pop();
+            }
+            st.empty()? nge.push_back(-1):nge.push_back(st.top());
+            st.push(arr[i]);
+    }
+    reverse(nge.begin(), nge.end());
+    return nge;
+}
+vector<int> findPSEE(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n);
+        stack<int> st;
+        for(int i=0; i < n; i++) {
+            int currEle = arr[i];
+            while(!st.empty() && arr[st.top()] > arr[i]){
+                st.pop();
+            }
+            ans[i] = !st.empty() ? st.top() : -1;
+            st.push(i);
+    }
+    return ans;
+}
+vector<int> findNSE(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n); 
+        stack<int> st;
+        for(int i = n - 1; i >= 0; i--) {
+            int currEle = arr[i];
+            while(!st.empty() && arr[st.top()] >= arr[i]){
+                st.pop();
+            }
+            ans[i] = !st.empty() ? st.top() : n;
+            st.push(i);
+        }
+        return ans;
+    }
 vector<int> count_NGE(vector<int> &arr, vector<int> &indices) {
     vector<int> ngec;
     int j=0;
@@ -577,6 +612,15 @@ int minE(vector<int>& arr){
     }
     return m;
 }
+int maxE(vector<int>& arr){
+    int m=arr[0];
+    for(int i=0;i<arr.size();i++){
+        if(m<arr[i]){
+            m=arr[i];
+        }
+    }
+    return m;
+}
 int sumSubarrayMins(vector<int> &arr) {
     int s=0;
     vector<vector<int>> subArrC;
@@ -591,36 +635,10 @@ int sumSubarrayMins(vector<int> &arr) {
     }
     return s;
 }
-//optimal by tuf
-vector<int> findNSE(vector<int> &arr) {
-        int n = arr.size();
-        vector<int> ans(n); 
-        stack<int> st;
-        for(int i = n - 1; i >= 0; i--) {
-            int currEle = arr[i];
-            while(!st.empty() && arr[st.top()] >= arr[i]){
-                st.pop();
-            }
-            ans[i] = !st.empty() ? st.top() : n;
-            st.push(i);
-        }
-        return ans;
-    }
+
+
     
-vector<int> findPSEE(vector<int> &arr) {
-        int n = arr.size();
-        vector<int> ans(n);
-        stack<int> st;
-        for(int i=0; i < n; i++) {
-            int currEle = arr[i];
-            while(!st.empty() && arr[st.top()] > arr[i]){
-                st.pop();
-            }
-            ans[i] = !st.empty() ? st.top() : -1;
-            st.push(i);
-    }
-    return ans;
-}
+
 int sumSubarrayMins1(vector<int> &arr) {
         vector<int> nse = 
             findNSE(arr);
@@ -639,9 +657,66 @@ int sumSubarrayMins1(vector<int> &arr) {
 }
 
 
+vector<int> asteroidCollision(vector<int> &asteroids){
+    vector<int> ans;
+    stack<int> spaceship1;
+    stack<int> spaceship2;
+    for(int i=asteroids.size()-1;i>=0;i--){
+        spaceship1.push(asteroids[i]);
+    }
+    while((!spaceship1.empty()&&spaceship1.size()>1)){
+        int a=spaceship1.top();
+        spaceship1.pop();
+        int b=spaceship1.top();
+        spaceship1.pop();
+        cout<<a<<" "<<b<<"\n";
+        if((a>0&&b>0)||(a<0&&b<0)){
+            spaceship2.push(a);
+            spaceship1.push(b);
+        }
+        else if(abs(a)>abs(b)){
+            spaceship1.push(a);
+            if(!spaceship2.empty()&&(spaceship1.top()<0&&spaceship2.top()>0)||spaceship1.top()>0&&spaceship2.top()<0){
+                spaceship1.push(spaceship2.top());
+                spaceship2.pop();
+            }
+        }else if(abs(a)<abs(b)){
+            spaceship1.push(b);
+            if(!spaceship2.empty()&&(spaceship1.top()<0&&spaceship2.top()>0)||spaceship1.top()>0&&spaceship2.top()<0){
+                spaceship1.push(spaceship2.top());
+                spaceship2.pop();
+            }
+        }else{
+            continue;
+        }
+    }
+    while(!spaceship2.empty()){
+        ans.push_back(spaceship2.top());
+        spaceship2.pop();
+    }
+    while(!spaceship1.empty()){
+        ans.push_back(spaceship1.top());
+        spaceship1.pop();
+    }
+    return ans;
+}
+
+long long subArrayRanges(vector<int> &nums) {
+    int s=0;
+    for(int i=0;i<nums.size();i++){
+        for(int j=i+1;j<=nums.size();j++){
+            vector<int> sac(nums.begin()+i, nums.begin()+j);
+            s+=(maxE(sac)-minE(sac));
+        }
+    }
+    return s;
+}
+
 int main(){
-    vector<int> arr={3,1,2,5};
-    cout<<sumSubarrayMins1(arr);
+    vector<int> arr={1,2,3};
+    for(auto x: prevSmallerElements(arr)){
+        cout<<x<<" ";
+    }
     return 0;
 }
 
