@@ -484,6 +484,7 @@ vector<int> nextLargerElement(vector<int> arr) {
 }
 
 
+
 vector<int> nextGreaterElements(vector<int> &arr) {
     stack<int> st;
     vector<int> nge;
@@ -508,11 +509,139 @@ vector<int> nextGreaterElements(vector<int> &arr) {
     reverse(nge.begin(), nge.end());
     return nge;
 }
-int main(){
-    vector<int> arr={3, 10, 4, 2, 1, 2, 6, 1, 7, 2, 9};
-for(auto x: nextGreaterElements(arr)){
-    cout<<x<<" ";
+
+vector<int> nextSmallerElements(const vector<int>& arr) {
+    stack<int> st;
+    vector<int> nge;
+    for(int i =arr.size()-1; i>=0;i--){
+        if(st.empty()){
+            st.push(arr[i]);
+            nge.push_back(-1);
+        }else if(arr[i]>st.top()){
+            nge.push_back(st.top());
+            st.push(arr[i]);
+        }else{
+            while(!st.empty() && st.top()>=arr[i]){
+                st.pop();
+            }
+            st.empty()? nge.push_back(-1):nge.push_back(st.top());
+            st.push(arr[i]);
+        }
+    }
+    reverse(nge.begin(), nge.end());
+    return nge;
 }
+
+vector<int> count_NGE(vector<int> &arr, vector<int> &indices) {
+    vector<int> ngec;
+    int j=0;
+    while(j<indices.size()){
+      stack<int> st;
+      for(int i=indices[j]+1;i<arr.size();i++){
+        if(arr[i]>arr[indices[j]]){
+            st.push(arr[i]);
+        }
+      }
+      ngec.push_back(st.size());
+      j++;
+    }
+    return ngec;
+}
+int trap(vector<int> &height){
+    int t=0;
+    for(int i =0;i<height.size();i++){
+        if(height[i]<=0){
+            continue;
+        }else{
+            for(int j=i+1;j<height.size();j++){
+                if(height[j]>=height[i]){
+                    t+=((j-i-1)*(height[i]));
+                    for(int c=i+1;c<j;c++){
+                        t-=height[c];
+                    }
+                    i=j-1;
+                    break;
+                }
+            }
+        }
+    }
+    return t;
+}
+
+int minE(vector<int>& arr){
+    int m=arr[0];
+    for(int i=0;i<arr.size();i++){
+        if(m>arr[i]){
+            m=arr[i];
+        }
+    }
+    return m;
+}
+int sumSubarrayMins(vector<int> &arr) {
+    int s=0;
+    vector<vector<int>> subArrC;
+    for(int i=0;i<arr.size();i++){
+        for(int j=i+1;j<=arr.size();j++){
+            vector<int> sac(arr.begin()+i, arr.begin()+j);
+            subArrC.push_back(sac);
+        }
+    }
+    for(auto x:subArrC){
+        s+=minE(x);
+    }
+    return s;
+}
+//optimal by tuf
+vector<int> findNSE(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n); 
+        stack<int> st;
+        for(int i = n - 1; i >= 0; i--) {
+            int currEle = arr[i];
+            while(!st.empty() && arr[st.top()] >= arr[i]){
+                st.pop();
+            }
+            ans[i] = !st.empty() ? st.top() : n;
+            st.push(i);
+        }
+        return ans;
+    }
+    
+vector<int> findPSEE(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n);
+        stack<int> st;
+        for(int i=0; i < n; i++) {
+            int currEle = arr[i];
+            while(!st.empty() && arr[st.top()] > arr[i]){
+                st.pop();
+            }
+            ans[i] = !st.empty() ? st.top() : -1;
+            st.push(i);
+    }
+    return ans;
+}
+int sumSubarrayMins1(vector<int> &arr) {
+        vector<int> nse = 
+            findNSE(arr);
+        vector<int> psee =
+            findPSEE(arr);
+        int n = arr.size();
+        int sum = 0;
+        for(int i=0; i < n; i++) {
+            int left = i - psee[i];
+            int right = nse[i] - i;
+            int freq = left*right; 
+            int val = (freq*arr[i]);
+            sum = (sum + val);
+        }
+        return sum;
+}
+
+
+int main(){
+    vector<int> arr={3,1,2,5};
+    cout<<sumSubarrayMins1(arr);
     return 0;
 }
 
