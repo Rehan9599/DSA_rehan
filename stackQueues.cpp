@@ -528,45 +528,17 @@ vector<int> prevLargerElement(vector<int> arr) {
 }
 vector<int> prevSmallerElements(const vector<int>& arr) {
     stack<int> st;
-    vector<int> nge;
-    for(int i =arr.size()-1; i>=0;i--){
-            while(!st.empty() && st.top() > arr[i]){
+    vector<int> pse;
+    for(int i = 0; i < arr.size(); i++){
+            while(!st.empty() && st.top() >= arr[i]){
                 st.pop();
             }
-            st.empty()? nge.push_back(-1):nge.push_back(st.top());
+            pse.push_back(st.empty() ? -1 : st.top());
             st.push(arr[i]);
     }
-    reverse(nge.begin(), nge.end());
-    return nge;
+    return pse;
 }
-vector<int> findPSEE(vector<int> &arr) {
-        int n = arr.size();
-        vector<int> ans(n);
-        stack<int> st;
-        for(int i=0; i < n; i++) {
-            int currEle = arr[i];
-            while(!st.empty() && arr[st.top()] > arr[i]){
-                st.pop();
-            }
-            ans[i] = !st.empty() ? st.top() : -1;
-            st.push(i);
-    }
-    return ans;
-}
-vector<int> findNSE(vector<int> &arr) {
-        int n = arr.size();
-        vector<int> ans(n); 
-        stack<int> st;
-        for(int i = n - 1; i >= 0; i--) {
-            int currEle = arr[i];
-            while(!st.empty() && arr[st.top()] >= arr[i]){
-                st.pop();
-            }
-            ans[i] = !st.empty() ? st.top() : n;
-            st.push(i);
-        }
-        return ans;
-    }
+
 vector<int> count_NGE(vector<int> &arr, vector<int> &indices) {
     vector<int> ngec;
     int j=0;
@@ -636,8 +608,62 @@ int sumSubarrayMins(vector<int> &arr) {
     return s;
 }
 
-
+vector<int> findNSE(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n);
+        stack<int> st;
+        for(int i = n - 1; i >= 0; i--) {
+            int currEle = arr[i];
+            while(!st.empty() && arr[st.top()] >= arr[i]){
+                st.pop();
+            }
+            ans[i] = !st.empty() ? st.top() : n;
+            st.push(i);
+        }
+        return ans;
+    }
     
+    vector<int> findPSEE(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> ans(n);
+        stack<int> st;
+        for(int i=0; i < n; i++) {
+            int currEle = arr[i];
+            while(!st.empty() && arr[st.top()] > arr[i]){
+                st.pop();
+            }
+            ans[i] = !st.empty() ? st.top() : -1;
+            st.push(i);
+        }
+            return ans;
+    }
+
+vector<int> findNLE(vector<int> &arr){
+    int n=arr.size();
+    vector<int>ans(n);
+    stack<int> sr;
+    for(int i=n-1;i>=0;i--){
+        while(!sr.empty()&& arr[sr.top()] <= arr[i]){
+            sr.pop();
+        }
+        ans[i]= !sr.empty()? sr.top(): n;
+        sr.push(i); 
+    }
+    return ans;
+}
+vector<int> findPLEE(vector<int> &arr){
+    int n=arr.size();
+    vector<int>ans(n);
+    stack<int> sr;
+    for(int i=0;i<n;i++){
+        while(!sr.empty()&& arr[sr.top()] < arr[i]){
+            sr.pop();
+        }
+        ans[i]= !sr.empty()? sr.top(): -1;
+        sr.push(i); 
+    }
+    return ans;
+}
 
 int sumSubarrayMins1(vector<int> &arr) {
         vector<int> nse = 
@@ -655,7 +681,22 @@ int sumSubarrayMins1(vector<int> &arr) {
         }
         return sum;
 }
-
+int sumSubarrayMaxs1(vector<int> &arr) {
+        vector<int> nle = 
+            findNLE(arr);
+        vector<int> plee =
+            findPLEE(arr);
+        int n = arr.size();
+        int sum = 0;
+        for(int i=0; i < n; i++) {
+            int left = i - plee[i];
+            int right = nle[i] - i;
+            int freq = left*right; 
+            int val = (freq*arr[i]);
+            sum = (sum + val);
+        }
+        return sum;
+}
 
 vector<int> asteroidCollision(vector<int> &asteroids){
     vector<int> ans;
@@ -711,12 +752,13 @@ long long subArrayRanges(vector<int> &nums) {
     }
     return s;
 }
+long long subArrayRanges1(vector<int> &nums) {
+    return sumSubarrayMaxs1(nums)-sumSubarrayMins1(nums);
+}
 
 int main(){
-    vector<int> arr={1,2,3};
-    for(auto x: prevSmallerElements(arr)){
-        cout<<x<<" ";
-    }
+    vector<int> arr={1, 2, 3};
+    cout<<subArrayRanges1(arr);
     return 0;
 }
 
