@@ -5,6 +5,7 @@
 #include <set>
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <climits>
 #include <stack>
 #include <queue>
@@ -597,7 +598,7 @@ int sumSubarrayMins(vector<int> &arr) {
     int s=0;
     vector<vector<int>> subArrC;
     for(int i=0;i<arr.size();i++){
-        for(int j=i+1;j<=arr.size();j++){
+        for (int j=i+1;j<=arr.size();j++){
             vector<int> sac(arr.begin()+i, arr.begin()+j);
             subArrC.push_back(sac);
         }
@@ -756,9 +757,13 @@ long long subArrayRanges1(vector<int> &nums) {
     return sumSubarrayMaxs1(nums)-sumSubarrayMins1(nums);
 }
 
+
+string removeKdigits(string nums, int k) {
+    
+}
 int main(){
-    vector<int> arr={1, 2, 3};
-    cout<<subArrayRanges1(arr);
+    string nums="1002991";
+    cout<<removeKdigits(nums,3);
     return 0;
 }
 
