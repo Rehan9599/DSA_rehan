@@ -759,7 +759,24 @@ long long subArrayRanges1(vector<int> &nums) {
 
 
 string removeKdigits(string nums, int k) {
-    
+    stack<char> srt;
+    string ans;
+    for(int i=0;i<nums.size();i++){
+        while(!srt.empty()&& k>0 && srt.top()>nums[i]){
+            srt.pop();
+            k--;
+        }
+        srt.push(nums[i]);
+    }
+    while(!srt.empty()){
+        ans+=srt.top();
+        srt.pop();
+    }
+    while(ans.size()>0 && ans.back()=='0'){
+        ans.pop_back();   
+    }
+    reverse(ans.begin(),ans.end());
+    return ans;
 }
 int main(){
     string nums="1002991";

@@ -1,24 +1,47 @@
 #include <iostream>
-#include <cmath>   // for pow()
+#include <cmath>
+#include <iomanip>
 
 using namespace std;
 
+double f(double x) {
+    return x * log10(x) - 1.2;
+}
+
 int main() {
-    cout << "NAME: REHAN FAZAL \nROLL NO:24BCS067\n" << endl;
+    double a, b, x;
+    int i = 0;
+    int m = 100;
+    double e = 0.000001;
 
-    float p, r, t, si, ci;
+    cout << "Rehan Fazal 24BCS067 \n";
 
-    cout << "Enter principal, rate, time: ";
-    cin >> p >> r >> t;
+    cout << "Enter initial guesses a and b: ";
+    cin >> a >> b;
 
-    // Simple Interest
-    si = (p * r * t) / 100;
+    if (f(a) * f(b) >= 0) {
+        cout << "Invalid interval: f(a) and f(b) must have opposite signs." << endl;
+        return 0;
+    }
 
-    // Compound Interest
-    ci = p * pow((1 + r / 100), t) - p;
+    while (i < m) {
+        x = (a * f(b) - b * f(a)) / (f(b) - f(a));
 
-    cout << "Simple Interest = "  << si << endl;
-    cout << "Compound Interest = " << ci << endl;
+        if (fabs(f(x)) < e) {
+            break;
+        }
+
+        if (f(a) * f(x) < 0) {
+            b = x;
+        } else {
+            a = x;
+        }
+        i++;
+    }
+
+
+    cout << "Root = " << x << endl;
+    cout << "Iterations = " << i << endl;
 
     return 0;
 }
