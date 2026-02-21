@@ -69,9 +69,42 @@ int totalFruits(vector<int>& fruits){
     return longest;
 }
 
+int maxScore(vector<int>& cardScore , int k){
+    // int l=0,r=cardScore.size()-1,maxx=0;
+    // while(r>0&&k>0){
+    //     if(cardScore[r]>cardScore[l]){
+    //         maxx+=cardScore[r];
+    //         r--;
+    //         k--;
+    //     }else{
+    //         maxx+=cardScore[l];
+    //         l++;
+    //         k--;
+    //     }
+    // }
+    // return maxx;
+
+    int total=0;
+    for(int i=0;i<k;i++){
+        total+=cardScore[i];
+    }
+
+    int maxxx=total;
+
+    for(int i=0;i<k;i++){
+        total-=cardScore[k-i-1];
+
+        total+=cardScore[cardScore.size()-i-1];
+
+        maxxx=max(total,maxxx);
+    }
+
+    return maxxx;
+}
+
 
 int main(){
-    vector<int> nums = {1, 2, 1};
-    cout<<totalFruits(nums);
+    vector<int> nums = {5, 4, 1, 8, 7, 1, 3};
+    cout<<maxScore(nums,3);
     return 0;
 }
