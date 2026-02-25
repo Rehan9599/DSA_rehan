@@ -99,28 +99,54 @@ bool isHeap(vector<int>& nums) {
     return f;
 }
 
+// vector<int> minToMaxHeap(vector<int> nums) {
+//     int i= nums.size()-1;
+//     while(i>0){
+//         if(nums[i]>nums[int(floor((i-1)/2))]){
+//              swap(nums[i],nums[int(floor((i-1)/2))]);
+//         }
+//         i--;
+//     }
+//     i=0;
+//     while(i<nums.size() && 2*i+1<nums.size()&& 2*i+2 <nums.size()){
+//         if(nums[i]<nums[2*i+1]){
+//             swap(nums[i],nums[2*i+1]);
+//         }else if(nums[i]< nums[2*i+2]){
+//             swap(nums[i],nums[2*i+2]);
+//         }
+//         i++;
+//     }
+//     return nums;
+// }
 vector<int> minToMaxHeap(vector<int> nums) {
-    int k=nums.size()-1;
-    while(k>0){
-        if(nums[k]>nums[int(floor((k-1)/2))]){
-            cout<<nums[k]<<" "<< nums[int(floor((k-1)/2))]<<"\n";
-            swap(nums[k],nums[int(floor((k-1)/2))]);
-            int i=int(floor((k-1)/2));
-            while(i<nums.size() && 2*i+1<nums.size()){
-              if(nums[i]<nums[2*i+1]){
-              swap(nums[i],nums[2*i+1]);
+    int n = nums.size();
+    for (int i = n/2 - 1; i >= 0; i--) {
+        int largest = i;
+        while (true) {
+            int left = 2*largest + 1;
+            int right = 2*largest + 2;
+            int maxIndex = largest;
+
+            if (left < n && nums[left] > nums[maxIndex])
+                maxIndex = left;
+            if (right < n && nums[right] > nums[maxIndex])
+                maxIndex = right;
+
+            if (maxIndex != largest) {
+                swap(nums[largest], nums[maxIndex]);
+                largest = maxIndex;
+            } else {
+                break;
             }
-            i++;
-           }
-        k--;
+        }
     }
-}
+
     return nums;
 }
 
 
 int main(){
-    vector<int>  nums = {-5, -4, -3, -2, -1};
+    vector<int>  nums = {10, 20, 30, 21, 23};
     for(auto x: minToMaxHeap(nums)){
         cout<<x<<" ";
     }
