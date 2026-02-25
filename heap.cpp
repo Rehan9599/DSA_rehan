@@ -29,11 +29,9 @@ class Solution{
         void insert(int key){
             heapVec[i++]=key;
             int k=i-1;
-            while(k>0){
-                if(heapVec[k]<heapVec[int(floor((k-1)/2))]){
-                    swap(heapVec[k],heapVec[int(floor((k-1)/2))]);
-                }
-                k=int(floor((k-1)/2));
+            while (k > 0 && heapVec[k] < heapVec[(k-1)/2]) {
+                swap(heapVec[k], heapVec[(k-1)/2]);
+                k = (k-1)/2;
             }
         }
 
@@ -46,11 +44,9 @@ class Solution{
         void changeKey(int index, int new_val){
             heapVec[index]=new_val;
             int k=i-1;
-            while(k>0){
-                if(heapVec[k]<heapVec[int(floor((k-1)/2))]){
-                    swap(heapVec[k],heapVec[int(floor((k-1)/2))]);
-                }
-                k=int(floor((k-1)/2));
+            while (k > 0 && heapVec[k] < heapVec[(k-1)/2]) {
+                swap(heapVec[k], heapVec[(k-1)/2]);
+                k = (k-1)/2;
             }
         }
 
@@ -60,12 +56,12 @@ class Solution{
             i--;
             int k=i-1;
             while(k>0){
-                if(heapVec[k]<heapVec[int(floor((k-1)/2))]){
-                    swap(heapVec[k],heapVec[int(floor((k-1)/2))]);
+                if(heapVec[k]<heapVec[(k-1)/2]){
+                    swap(heapVec[k],heapVec[(k-1)/2]);
                 }
-                k=int(floor((k-1)/2));
+                k=(k-1)/2;
             }
-            while(k<=i){
+            while(k<=i && 2*k+1<=i && 2*k+2<=i){
                 if(heapVec[k]>heapVec[2*k+1] && 2*k+1<=i){
                     swap(heapVec[k],heapVec[2*k+1]);
                 }
@@ -74,7 +70,7 @@ class Solution{
         }
 
         bool isEmpty(){
-            return heapVec.size()? false: true;
+            return i==0;
         }
 
         int getMin(){
@@ -145,10 +141,33 @@ vector<int> minToMaxHeap(vector<int> nums) {
 }
 
 
-int main(){
-    vector<int>  nums = {10, 20, 30, 21, 23};
-    for(auto x: minToMaxHeap(nums)){
-        cout<<x<<" ";
+// int kthLargestElement(vector<int>& nums, int k) {
+//     Solution heapK;
+//     heapK.initializeHeap();
+//     for(int i=0;i<nums.size();i++){
+//         heapK.insert(nums[i]);
+//     }
+//     int z=nums.size()-k;
+//     while(z>0){
+//         heapK.extractMin();
+//         z--;
+//     }
+//     return heapK.getMin();
+// }
+
+int kthLargestElement(vector<int>& nums, int k) {
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    for (int num : nums) {
+        minHeap.push(num);
+        if (minHeap.size() > k) {
+            minHeap.pop();
+        }
     }
+    return minHeap.top();
+}
+int main(){
+    vector<int>  nums = {-5, 4, 1, 2, -3};
+    cout<<kthLargestElement(nums,5);
     return 0;
 }
