@@ -10,6 +10,7 @@
 #include <stack>
 #include <queue>
 #include <map>
+#include <unordered_map>
 #include <string>
 using namespace std;
 
@@ -166,8 +167,28 @@ int kthLargestElement(vector<int>& nums, int k) {
     }
     return minHeap.top();
 }
+vector<int> replaceWithRank(vector<int>& arr) {
+    vector<int> sol;
+    vector<int> sarr=arr;
+    sort(sarr.begin(),sarr.end());
+    unordered_map<int,int> rank;
+    int r = 1;
+    for(int i=0;i<sarr.size();i++){
+        if(i-1>=0 && sarr[i]==sarr[i-1]){
+            continue;
+        }
+        rank.insert({sarr[i], r++});
+    }
+
+    for(auto x: arr){
+        sol.push_back(rank[x]);
+    }
+    return sol;
+}
 int main(){
-    vector<int>  nums = {-5, 4, 1, 2, -3};
-    cout<<kthLargestElement(nums,5);
+    vector<int>  nums = {1, 5, 8, 15, 8, 25, 9};
+    for(auto x: replaceWithRank(nums)){
+        cout<<x<<" ";
+    }
     return 0;
 }
