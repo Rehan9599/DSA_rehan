@@ -185,10 +185,91 @@ vector<int> replaceWithRank(vector<int>& arr) {
     }
     return sol;
 }
-int main(){
-    vector<int>  nums = {1, 5, 8, 15, 8, 25, 9};
-    for(auto x: replaceWithRank(nums)){
-        cout<<x<<" ";
+
+
+int leastInterval(vector<char>& tasks, int n) {
+    unordered_map<char,int> taskF;
+    for(auto x: tasks){
+        taskF[x]++;
     }
+    priority_queue<int> maxHeap;
+
+
+    for(auto t: taskF){
+        maxHeap.push(t.second);
+    }
+
+    int t=0;
+
+    while(!maxHeap.empty()){
+        vector<int> temp;
+
+        int cycle=n+1;
+
+        int i=0;
+
+        while(i<cycle && !maxHeap.empty()){
+
+            int p=maxHeap.top();
+            maxHeap.pop();
+
+            p--;
+
+            if(p>0){
+                temp.push_back(p);
+            }
+            t++;
+
+            i++;
+        }
+
+        for(auto val: temp){
+            maxHeap.push(val);
+        }
+
+        if(maxHeap.empty()){
+            break;
+        }
+        t+= cycle-i; //idle time
+    }
+
+    return t;
+}
+
+bool isNStraightHand(vector<int>& hand, int groupSize) {
+    if(hand.size()%groupSize!=0){
+       return false;
+    }
+    sort(hand.begin(), hand.end());
+    map<int,int> f;
+    for(auto x : hand){
+        f[x]++;
+    }
+    auto it=f.begin();
+
+    while(it!=f.end()){
+        if(it->second==0){
+            ++it;
+            continue;
+        }
+
+        int start=it->first;
+
+        int count=it->second;
+
+        for(int i=0; i<groupSize;i++){
+            if(f[start+i]<count) return false;
+
+            f[start+i]-=count;
+        }
+        it++;
+    }
+
+    return true;
+}
+
+int main(){
+    vector<int>  hand = {1,2,3,6,2,3,4,7,8};
+    cout<<isNStraightHand(hand,3);
     return 0;
 }
