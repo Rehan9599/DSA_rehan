@@ -268,8 +268,92 @@ bool isNStraightHand(vector<int>& hand, int groupSize) {
     return true;
 }
 
+
+
+class Twitter {
+private: 
+map<int,vector<int>> tweet;
+map<int,vector<int>> user;
+int n;
+public:
+  Twitter() {
+    n=10;
+  }
+
+  void postTweet(int userId, int tweetId) {
+    tweet[userId].push_back(tweetId);
+  }
+
+  vector<int> getNewsFeed(int userId) {
+    stack<int> news;
+    vector<int> feed;
+    for(auto x: tweet[userId]){
+        news.push(x);
+    }
+    for(auto y: user[userId]){
+        for(auto z: tweet[y]){
+            news.push(z);
+        }
+    }
+    while(!news.empty()){
+        feed.push_back(news.top());
+        news.pop();
+    }
+    return feed;
+  }
+
+  void follow(int followerId, int followeeId) {
+    user[followerId].push_back(followeeId);
+  } 
+  void unfollow(int followerId, int followeeId) {
+    for(int i=0;i<user[followerId].size();i++){
+        if(followeeId==user[followerId][i]){
+            user[followerId][i]=-1;
+        }
+    }
+  } 
+};
+
+int connectSticks(vector<int>& sticks) {
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    for(auto x:sticks){
+        minHeap.push(x);
+    }
+    int minCost=0;
+    while(minHeap.size()>1){
+        int d=minHeap.top();
+        minHeap.pop();
+        int c=minHeap.top();
+        minHeap.pop();
+        minCost+=(c+d);
+        minHeap.push(c+d);
+    }
+    return minCost;
+}
+
+vector<int> topKFrequent(const vector<int>& nums, int k) {
+    unordered_map<int,int> freq;
+    for(auto x: nums){
+        freq[x]++;
+    }
+    priority_queue<pair<int,int>> maxHeap;
+    for(auto x: freq){
+        maxHeap.push({x.second,x.first});
+    }
+    vector<int> topF;
+    while(k>0 && !maxHeap.empty()){
+        topF.push_back(maxHeap.top().second);
+        maxHeap.pop();
+        k--;
+    }
+
+    return topF;
+}
+
 int main(){
-    vector<int>  hand = {1,2,3,6,2,3,4,7,8};
-    cout<<isNStraightHand(hand,3);
+    vector<int> nums = {1,1,1,2,2,3};
+    for(auto x: topKFrequent(nums,2)){
+        cout<<x<<" ";
+    }
     return 0;
 }
