@@ -30,13 +30,42 @@ int findMaximumCookieStudents(vector<int>& Student, vector<int>& Cookie){
 }
 
 double fractionalKnapsack(vector<long long>& val, vector<long long>& wt, long long capacity) {
-        // Your code goes here
+    long long sum=0;
+    long long res=0;
+    for(auto x: wt){
+        sum+=x;
     }
+    if(sum<capacity){
+        for(auto x: val){
+        res+=x;
+        }
+        return res;
+    }
+    vector<pair<double ,int>> unitValue;
+    for(int i=0;i<val.size();i++){
+        unitValue.push_back({val[i]/wt[i],i});
+    }
+    
+    sort(unitValue.begin(),unitValue.end(),greater<pair<double, int>>());
+    for(int i=0;i<val.size();i++){
+        if(capacity==0) break;
+        int y=unitValue[i].second;
+        if(wt[y]<capacity){
+            res+=val[y];
+            capacity-=wt[y];
+        }else{
+            res+=(capacity*val[y])/wt[y];
+            capacity=0;
+        }
+    }
+    return res;
+}
 
 
 int main(){
-    vector<int> student={1,2};
-    vector<int> cookie={1,2,3};
-    cout<<findMaximumCookieStudents(student,cookie);
+    vector<long long> val={60,100};
+    vector<long long> wt={10,20};
+    long long capacity=50;
+    cout<<fractionalKnapsack(val,wt,capacity);
     return 0;
 }
