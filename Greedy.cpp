@@ -61,11 +61,58 @@ double fractionalKnapsack(vector<long long>& val, vector<long long>& wt, long lo
     return res;
 }
 
+bool lemonadeChange(vector<int>& bills){
+    int l=0,r=0;
+    int count5=0, count10=0, count20=0;
+    while(r<bills.size()){
+        if(bills[r]>5){
+            int cash=bills[r];
+            cout<<"recieved    "<<cash<<"\n";
+            if(cash==10){
+                if(count5>=1){
+                    count5--;
+                    cash-=5;
+                    count10++;
+                    cout<<"returning    5 \n";
+                }else{
+                    cout<<"no change\n";
+                    return false;
+                }
+            }
+            if(cash==20){
+                if(count5>=1 && count10>=1){
+                    count5--;
+                    count10--;
+                    cash-=15;
+                    count20++;
+                    cout<<"returning    5 10 \n";
+                }else if(count5>=3){
+                    count5-=3;
+                    count20++;
+                    cash-=15;
+                    cout<<"returning    5 5 5 \n";
+                }else{
+                    cout<<"no appropriate change\n";
+                    return false;
+                }
+            }
+        }else{
+            count5++;
+        }
+        r++;
+    }
+    return true;
+}
+
+
+int maxMeetings(vector<int>& start, vector<int>& end){
+    
+
+}
+
 
 int main(){
-    vector<long long> val={60,100};
-    vector<long long> wt={10,20};
-    long long capacity=50;
-    cout<<fractionalKnapsack(val,wt,capacity);
+    vector<int> bills={5, 5, 10, 10, 20};
+    cout<<lemonadeChange(bills);
     return 0;
 }
