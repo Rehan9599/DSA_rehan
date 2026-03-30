@@ -104,15 +104,127 @@ bool lemonadeChange(vector<int>& bills){
     return true;
 }
 
-
 int maxMeetings(vector<int>& start, vector<int>& end){
-    
+    for(int i=0;i<end.size();i++){
+        for(int j=i+1; j<end.size()-1;j++){
+            if(end[j]<end[i]){
+                swap(end[j],end[i]);
+                swap(start[j],start[i]);
+            }
+        }
+    }
 
+    int r=0, ans=0 , lastend=INT16_MIN;
+    while(r<end.size()){
+        if(start[r]>lastend){
+            ans++;
+            lastend=end[r];
+        }
+        r++;
+    }
+    return ans;
 }
 
 
+bool canJump(vector<int>& nums) {
+    int r=0, maxin=nums[0];
+    while(r<nums.size()){
+        if(r>maxin){
+            return false;
+        }else{
+            maxin=max(maxin, r+nums[r]);
+        }
+        r++;
+    }
+    return true;
+}
+
+int jump(vector<int>& nums) {
+int r=0, maxin=0,jump=0,end=0;
+    while(r<nums.size()){
+        if(r>maxin){
+            return 0;
+        }else{
+            maxin=max(maxin, r+nums[r]);
+            if(r==end){
+                jump++;
+                end=maxin;
+            }
+            if(end>=nums.size()-1) break;
+        }
+        r++;
+    }
+    return jump;
+}
+
+int findPlatform(vector<int>& Arrival, vector<int>& Departure){
+    int nPlatforms=1,maxplatform=1;
+    sort(Departure.begin(),Departure.end());
+    sort(Arrival.begin(),Arrival.end());
+    int r=1,l=0;
+    // while(nPlatforms<Arrival.size()){
+    //     nPlatforms++;
+    //     r=0;
+    //     int Atime=50,f=0;
+    //    while(r<Departure.size()){
+    //     if(Arrival[r]>Atime){
+    //         Arrival[r]=nPlatforms;
+    //         Atime=Departure[r];
+    //     }
+    //     r++;
+    // }
+    // for(auto x:Arrival){
+    //     if(x>Arrival.size()){
+    //         f=1;
+    //     }
+    // }
+    // if(f==0) break;
+    // }
+
+    while(r<Departure.size()){
+        maxplatform=max(maxplatform,nPlatforms);
+        if(Arrival[r]<=Departure[l]){
+            nPlatforms++;
+            r++;
+        }else{
+            nPlatforms--;
+            l++;
+        }
+    }
+    return maxplatform;
+}
+
+bool compareCols(const std::vector<int>& v1, const std::vector<int>& v2) {
+    return v1[2] > v2[2]; 
+}
+vector<int> JobScheduling(vector<vector<int>>& Jobs) { 
+    sort(Jobs.begin(), Jobs.end(), compareCols);
+
+    vector<int> ans;
+    int maxprofit=0, njobs=0;
+
+    int i=0,j=0,time=0;
+    while(i<Jobs.size()){
+        if(Jobs[i][1]>time){
+            maxprofit+=Jobs[i][2];
+            njobs++;
+            time++;
+        }
+        i++;
+    }
+
+    ans.push_back(njobs);
+    ans.push_back(maxprofit);
+
+    return ans;
+
+} 
+
+
 int main(){
-    vector<int> bills={5, 5, 10, 10, 20};
-    cout<<lemonadeChange(bills);
+vector<vector<int>> jobs= {{1, 2, 100} , {2, 1, 19} , {3, 2, 27} , {4, 1, 25}, {5,1,15}};
+for(auto &x:JobScheduling(jobs)){
+    cout<<x<<" ";
+}
     return 0;
 }
