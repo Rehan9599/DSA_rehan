@@ -221,10 +221,122 @@ vector<int> JobScheduling(vector<vector<int>>& Jobs) {
 } 
 
 
-int main(){
-vector<vector<int>> jobs= {{1, 2, 100} , {2, 1, 19} , {3, 2, 27} , {4, 1, 25}, {5,1,15}};
-for(auto &x:JobScheduling(jobs)){
-    cout<<x<<" ";
+long long solve(vector<int>& bt) {
+    sort(bt.begin(),bt.end());
+    int wt=0;
+    int twt=0;
+    int r=0;
+    while(r<bt.size()-1){
+        wt+=bt[r];
+        r++;
+        twt+=wt;
+        cout<<wt<<" "<<twt<<"\n";
+    }
+    return floor(twt/bt.size());
 }
-    return 0;
+
+
+
+class LRUCache {
+  private:
+  int n;
+  int i,recent;
+  unordered_map<int,int> lru;
+  public:
+
+  LRUCache(int capacity) {
+    n=capacity;
+    i=0;
+  }
+
+  int get(int key_) {
+    if(lru.find(key_) != lru.end()){
+        recent=key_;
+        return lru[key_];
+    }else{
+        return -1;
+    }
+  }
+
+  void put(int key_, int value) {
+    if(i<n){
+        lru[key_]=value;
+        recent=key_;
+
+        i++;
+    }else{
+        int lr;
+        if(n>1){
+        for(auto x :lru){
+            if(x.first!=recent){
+                lr=x.first;
+            }
+        } 
+        }else{
+            lr=recent;
+        }
+        lru.erase(lr);
+        recent=key_;
+        lru[key_]=value;
+    }
+  }
+};
+
+
+
+vector<vector<int>> insertNewInterval(vector<vector<int>>& Intervals, vector<int>& newInterval){
+    int l=0,r=0;
+    while(l<Intervals.size()){
+        if(newInterval[0]<=Intervals[l][1] && Intervals[l][1]<=newInterval[1]){
+            Intervals.insert(Intervals.begin()+l+1,newInterval);
+            break;
+        }
+        l++;
+    }
+    while(r<Intervals.size()-1){
+        if(Intervals[r][1]>=Intervals[r+1][0]){
+            Intervals[r][1]=max(Intervals[r+1][1], Intervals[r][1]);
+            Intervals.erase(Intervals.begin()+r+1);
+        }else{
+            r++;
+        }
+    }
+    return Intervals;
+}
+
+vector<vector<int>> mergeIntervals(vector<vector<int>>& intervals) {
+    int r=0;
+    while(r<intervals.size()-1){
+        if(intervals[r][1]>=intervals[r+1][0]){
+            intervals[r][1]=max(intervals[r+1][1], intervals[r][1]);
+            intervals.erase(intervals.begin()+r+1);
+        }else{
+            r++;
+        }
+    }
+    return intervals;
+}
+
+
+int MaximumNonOverlappingIntervals(vector<vector<int>>& Intervals) {
+    sort(Intervals.begin(),Intervals.end(),[](vector<int> x, vector<int> y){
+        return x[1]<y[1];
+    });
+    int r=0,c=0,l=1;
+    while(r<Intervals.size() && l<Intervals.size()){
+        if(Intervals[r][1]<=Intervals[l][0]){
+            r++;
+            c++;
+        }
+        l++;
+    }
+return Intervals.size()-c-1;
+}
+
+
+int main(){
+vector<vector<int>> Intervals = {{ 1, 2},{2,3},{3,4},{1,3}};
+vector<int> newInterval= {2,5};
+cout<<MaximumNonOverlappingIntervals(Intervals);
+return 0;
 }
