@@ -30,8 +30,87 @@ vector<vector<int>> treeTraversal(TreeNode* root){
 
     
 
+    stack<pair<TreeNode*, int>> trav;
+
+    trav.push({root,1});
+
+    if(root==nullptr) return res;
+
+    while(!trav.empty()){
+        auto it=trav.top();
+        trav.pop();
+
+
+        if(it.second==1){
+            preOrder.push_back(it.first->data);
+            it.second++;
+            trav.push(it);
+
+            if(it.first->left!=nullptr){
+                trav.push({it.first->left, 1});
+            }
+        }
+
+        else if(it.second==2){
+            inOrder.push_back(it.first->data);
+            it.second++;
+
+            trav.push(it);
+
+            if(it.first->right!=nullptr){
+                trav.push({it.first->right, 1});
+            }
+
+        }
+
+        else{
+            posOrder.push_back(it.first->data);
+        }
+    }
+    res.push_back(inOrder);
+    res.push_back(preOrder);
+    res.push_back(posOrder);
+
+    return res;
+
 
 }
+
+
+vector<int> preorder(TreeNode* root,vector<int>& pre){
+    if(root==nullptr) return pre;
+
+    pre.push_back(root->data);
+
+    preorder(root->left,pre);
+
+    preorder(root->right,pre);
+
+    return pre;
+}
+
+
+vector<int> inorder(TreeNode* root,vector<int>& in){
+    if(root==nullptr) return in;
+
+    inorder(root->left,in);
+    in.push_back(root->data);
+    inorder(root->right,in);
+
+    return in;
+}
+
+vector<int> postorder(TreeNode* root,vector<int>& pos){
+   if(root==nullptr) return pos;
+
+    postorder(root->left,pos);
+    
+    postorder(root->right,pos);
+    pos.push_back(root->data);
+
+    return pos;
+}
+
 
 int main(){
     vector<int> roots = {1, 3, 4, 5, 2, 7, 6 };
@@ -50,11 +129,10 @@ int main(){
         if(l<roots.size()) root[i]->left=root[l];
     }
 
-    for(auto x: treeTraversal(root[0])){
-        for(auto y: x){
-            cout<<y<<" ";
-        }
-        cout<<"\n";
+    vector<int> pre;
+
+    for(auto x: postorder(root[0],pre)){
+        cout<<x<<" ";
     }
     return 0;
 }
