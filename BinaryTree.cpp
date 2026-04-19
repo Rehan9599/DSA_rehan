@@ -111,9 +111,35 @@ vector<int> postorder(TreeNode* root,vector<int>& pos){
     return pos;
 }
 
+vector<vector<int> > levelOrder(TreeNode* root) {
+    vector<vector<int>> res;
+    deque<TreeNode*> queue;
+    if(root!=nullptr) queue.push_back(root);
+    while(!queue.empty()){
+        vector<int> lev;
+        int lsize=queue.size();
+        for(int i=0; i<lsize;i++){
+            lev.push_back(queue[i]->data);
+            if(queue[i]->left!=nullptr){
+                queue.push_back(queue[i]->left);
+            }
+            if(queue[i]->right!=nullptr){
+                queue.push_back(queue[i]->right);
+            }
+        }
+        int c=0;
+        while(c<lsize){
+            queue.pop_front();
+            c++;
+        }
+        res.push_back(lev);
+    }
+    return res;
+}
+
 
 int main(){
-    vector<int> roots = {1, 3, 4, 5, 2, 7, 6 };
+    vector<int> roots = {1, 4, 5, 7,-1,-1, 6 };
 
     vector<TreeNode*> root(roots.size(),nullptr);
 
@@ -131,8 +157,11 @@ int main(){
 
     vector<int> pre;
 
-    for(auto x: postorder(root[0],pre)){
-        cout<<x<<" ";
+    for(auto x: levelOrder(root[0])){
+        for(auto y :x){
+            cout<<y<<" ";
+        }
+        cout<<"\n";
     }
     return 0;
 }
