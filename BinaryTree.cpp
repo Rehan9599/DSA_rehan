@@ -138,8 +138,45 @@ vector<vector<int> > levelOrder(TreeNode* root) {
 }
 
 
+vector<int> preorder1(TreeNode* root){
+    stack<TreeNode*> st;
+    vector<int> ans;
+    if(root!=nullptr) st.push(root);
+    while(!st.empty()){
+        auto it =st.top();
+        st.pop();
+        ans.push_back(it->data);
+        if(it->right!=nullptr) st.push(it->right);
+        if(it->left!=nullptr) st.push(it->left);
+    }
+    return ans;
+}
+vector<int> inorder1(TreeNode* root){
+    stack<TreeNode*> st;
+    TreeNode* node=root;
+    vector<int> ans;
+    if(root!=nullptr) st.push(root);
+    while(true){
+        if(node!=nullptr){
+            st.push(node);
+            node=node->left;
+        }else{
+            if(st.empty()){
+                break;
+            }
+            node=st.top();
+            st.pop();
+            ans.push_back(node->data);
+            node=node->right;
+        }
+    }
+    return ans;
+}
+
+
+
 int main(){
-    vector<int> roots = {1, 4, 5, 7,-1,-1, 6 };
+    vector<int> roots = {1, 4, 5, 7,3,2, 6 };
 
     vector<TreeNode*> root(roots.size(),nullptr);
 
@@ -157,11 +194,8 @@ int main(){
 
     vector<int> pre;
 
-    for(auto x: levelOrder(root[0])){
-        for(auto y :x){
-            cout<<y<<" ";
-        }
-        cout<<"\n";
+    for(auto x: inorder1(root[0])){
+        cout<<x<<" ";
     }
     return 0;
 }
