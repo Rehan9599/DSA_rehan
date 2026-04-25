@@ -173,7 +173,26 @@ vector<int> inorder1(TreeNode* root){
     return ans;
 }
 
+int maxDepth(TreeNode* root) {
+    if(root==nullptr){
+        return 0;
+    }
+    int ansl=maxDepth(root->left);
+    int ansr=maxDepth(root->right);
+    return 1+max(ansl,ansr);
+}
 
+bool isBalanced(TreeNode *root){
+    if(root==nullptr) return true;
+    int maxl=maxDepth(root->left);
+    int maxr=maxDepth(root->right);
+    if(abs(maxl-maxr)>1) return false;
+    bool leftB=isBalanced(root->left);
+    if(leftB==false) return false;
+    bool rightB=isBalanced(root->right);
+    if(rightB==false) return false;
+    return true;
+}
 
 int main(){
     vector<int> roots = {1, 4, 5, 7,3,2, 6 };
@@ -192,10 +211,7 @@ int main(){
         if(l<roots.size()) root[i]->left=root[l];
     }
 
-    vector<int> pre;
+    cout<<isBalanced(root[0]);
 
-    for(auto x: inorder1(root[0])){
-        cout<<x<<" ";
-    }
     return 0;
 }
