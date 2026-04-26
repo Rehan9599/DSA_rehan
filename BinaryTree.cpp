@@ -194,6 +194,13 @@ bool isBalanced(TreeNode *root){
     return true;
 }
 
+int diameterOfBinaryTree(TreeNode* root) {
+    if(root==nullptr) return true;
+    int maxl=maxDepth(root->left);
+    int maxr=maxDepth(root->right);
+    return maxl+maxr;
+}
+
 int main(){
     vector<int> roots = {1, 4, 5, 7,3,2, 6 };
 
@@ -211,7 +218,7 @@ int main(){
         if(l<roots.size()) root[i]->left=root[l];
     }
 
-    cout<<isBalanced(root[0]);
+    cout<<diameterOfBinaryTree(root[0]);
 
     return 0;
 }
