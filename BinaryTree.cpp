@@ -201,6 +201,25 @@ int diameterOfBinaryTree(TreeNode* root) {
     return maxl+maxr;
 }
 
+
+
+int maxPath(TreeNode* root,int& maxi) {
+     if(root==nullptr){
+        return 0;
+    }
+    int ansl=maxPath(root->left,maxi);
+    int ansr=maxPath(root->right,maxi);
+    maxi=max(maxi,root->data+ansl+ansr);
+
+    return root->data+max(ansl,ansr);
+}
+
+int maxPathSum(TreeNode* root){
+    int maxi=INT16_MIN;
+    maxPath(root,maxi);
+    return maxi;
+}
+
 int main(){
     vector<int> roots = {1, 4, 5, 7,3,2, 6 };
 
@@ -218,7 +237,7 @@ int main(){
         if(l<roots.size()) root[i]->left=root[l];
     }
 
-    cout<<diameterOfBinaryTree(root[0]);
+    cout<<maxPathSum(root[0]);
 
     return 0;
 }
