@@ -220,24 +220,116 @@ int maxPathSum(TreeNode* root){
     return maxi;
 }
 
+bool isSameTree(TreeNode* p, TreeNode* q) {
+    if(p==nullptr||q==nullptr) return true;
+    if(p->data!=q->data) return false;
+    cout<<p->data<<" "<<q->data<<"\n";
+    bool l=isSameTree(p->left,q->left);
+    bool r=isSameTree(p->right,q->right);
+    return l&&r;
+}
+
+
+vector<vector<int> > zigzagLevelOrder(TreeNode* root) {
+    vector<vector<int>> res;
+    deque<TreeNode*> queue;
+    if(root!=nullptr) queue.push_back(root);
+    int z=0;
+    while(!queue.empty()){
+        vector<int> lev;
+        int lsize=queue.size();
+        z++;
+        for(int i=0; i<lsize;i++){
+            if (z%2==0 ) lev.push_back(queue[i]->data);
+            if(z%2!=0)   lev.push_back(queue[lsize-i-1]->data);
+            if(queue[i]->right!=nullptr){
+                queue.push_back(queue[i]->right);
+            }
+            if(queue[i]->left!=nullptr){
+                queue.push_back(queue[i]->left);
+            }
+        }
+        int c=0;
+        while(c<lsize){
+            queue.pop_front();
+            c++;
+        }
+        res.push_back(lev);
+    }
+    return res;
+}
+
+vector<int> leafnodes(TreeNode* root,vector<int>& ln){
+    if(root==nullptr){
+        return ln;
+    }
+    if(root->left==nullptr&&root->right==nullptr) ln.push_back(root->data);
+    leafnodes(root->left,ln);
+    leafnodes(root->right,ln);
+    return ln;
+}
+
+vector <int> boundary(TreeNode* root){
+    vector<int>lb,mb,rb;
+    vector<int> sol;
+    TreeNode* l=root,*r=root,*m=root;
+    while(l!=nullptr){
+        lb.push_back(l->data);
+        l=l->left;
+    }
+    while(r!=nullptr){
+        rb.push_back(r->data);
+        r=r->right;
+    }
+    leafnodes(m,mb);
+
+    for(int i=0;i<lb.size()-1;i++){
+        sol.push_back(lb[i]);
+    }
+    for(int i=0;i<mb.size();i++){
+        sol.push_back(mb[i]);
+    }
+    for(int i=rb.size()-2;i>0;i--){
+        sol.push_back(rb[i]);
+    }
+    return sol;
+}
+
+TreeNode* buildTree(const vector<int>& roots){
+    if(roots.empty() || roots[0]==-1) return nullptr;
+
+    TreeNode* root=new TreeNode(roots[0]);
+    queue<TreeNode*> q;
+    q.push(root);
+
+    size_t i=1;
+    while(i<roots.size() && !q.empty()){
+        TreeNode* node=q.front();
+        q.pop();
+
+        if(i<roots.size() && roots[i]!=-1){
+            node->left=new TreeNode(roots[i]);
+            q.push(node->left);
+        }
+        i++;
+
+        if(i<roots.size() && roots[i]!=-1){
+            node->right=new TreeNode(roots[i]);
+            q.push(node->right);
+        }
+        i++;
+    }
+
+    return root;
+}
+
 int main(){
-    vector<int> roots = {1, 4, 5, 7,3,2, 6 };
+    vector<int> roots = {1, 2, -1, 4, 9, 6, 5, 3, -1,-1,-1,-1,-1, 7, 8};
 
-    vector<TreeNode*> root(roots.size(),nullptr);
+    TreeNode* root=buildTree(roots);
 
-    for(int i=0;i<roots.size();i++){
-        root[i]=new TreeNode(roots[i]);
+    for(auto x : boundary(root)){
+        cout<<x<<" ";
     }
-
-    for(int i=0;i<roots.size();i++){
-        int l=2*i+1;
-        int r= 2*i+2;
-
-        if(r<roots.size()) root[i]->right=root[r];
-        if(l<roots.size()) root[i]->left=root[l];
-    }
-
-    cout<<maxPathSum(root[0]);
-
     return 0;
 }
