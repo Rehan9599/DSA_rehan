@@ -323,13 +323,129 @@ TreeNode* buildTree(const vector<int>& roots){
     return root;
 }
 
+vector<vector<int>> markNodes(TreeNode* root,vector<vector<int>>& marked,int r=0,int c=0){
+    if(root==nullptr) return marked;
+    marked.push_back({r,c,root->data});
+    markNodes(root->left,marked,r+1,c-1);
+    markNodes(root->right,marked,r+1,c+1);
+    return marked;
+}
+vector<vector<int> > verticalTraversal(TreeNode* root) {
+    vector<vector<int>> marked,res;
+    markNodes(root,marked);
+    for(int i=0;i<marked.size();i++){
+        for(int j=i+1;j<marked.size();j++){
+            if(marked[i][1]>marked[j][1]){
+                swap(marked[i],marked[j]);
+            }
+        }
+    }
+    int i=0;
+    while(i<marked.size()){
+        vector<int> temp;
+        temp.push_back(marked[i][2]);
+        for(int k=i+1;k<marked.size();k++){
+            if(marked[i][1]==marked[k][1]){
+                temp.push_back(marked[k][2]);
+            }
+        }
+        res.push_back(temp);
+        i+=temp.size();
+    }
+    
+    return res;
+}
+
+vector<int> topView(TreeNode *root){
+    vector<int>lb,rb;
+    vector<int> sol;
+    TreeNode* l=root,*r=root;
+    while(l!=nullptr){
+        lb.push_back(l->data);
+        l=l->left;
+    }
+    while(r!=nullptr){
+        rb.push_back(r->data);
+        r=r->right;
+    }
+
+    for(int i=lb.size()-1;i>=0;i--){
+        sol.push_back(lb[i]);
+    }
+    for(int i=1;i<rb.size();i++){
+        sol.push_back(rb[i]);
+    }
+    return sol;
+}
+
+vector<int> bottomView(TreeNode *root){
+    vector<int> ans;
+    if(root == NULL){
+            return ans;
+    }
+    map<int, int> mpp;
+
+    queue<pair<TreeNode*, int>> q;
+
+    q.push({root, 0});
+
+    while(!q.empty()){
+        auto it = q.front();
+        q.pop();
+        TreeNode* node = it.first;
+        int line = it.second;
+
+        mpp[line] = node->data;
+        if(node->left != NULL){
+            q.push({node->left, line - 1});
+        }
+        if(node->right != NULL){
+            q.push({node->right, line + 1});
+        }
+    }
+    for(auto it : mpp){
+        ans.push_back(it.second);
+    }
+    
+    return ans;
+}
+vector<int> rightSideView(TreeNode* root) {
+    vector<int>rb;
+    vector<int> sol;
+    TreeNode*r=root;
+    while(r!=nullptr){
+        rb.push_back(r->data);
+        r=r->right;
+    }
+    for(int i=0;i<rb.size();i++){
+        sol.push_back(rb[i]);
+    }
+    return sol;
+}
+
+bool issym(TreeNode* p, TreeNode* q){
+    if((p==nullptr&& q!=nullptr)||(p!=nullptr&&q==nullptr)) return false;
+    if(p==nullptr&& q==nullptr) return true;
+    if(p->data!=q->data) return false;
+    bool l=issym(p->left,q->right);
+    bool r=issym(p->right,q->left);
+    return l&&r;
+}
+
+bool isSymmetric(TreeNode* root) {
+    return issym(root,root);
+}
+
 int main(){
-    vector<int> roots = {1, 2, -1, 4, 9, 6, 5, 3, -1,-1,-1,-1,-1, 7, 8};
+    vector<int> roots = {1, 2, 2, -1, 3, -1, 3};
 
     TreeNode* root=buildTree(roots);
-
-    for(auto x : boundary(root)){
-        cout<<x<<" ";
-    }
+    cout<<issym(root,root);
+    // for(auto x : verticalTraversal(root)){
+    //     for(auto y: x){
+    //         cout<<y<<" ";
+    //     }
+    //     cout<<"\n";
+    // }
     return 0;
 }
