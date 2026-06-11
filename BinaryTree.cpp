@@ -436,16 +436,52 @@ bool isSymmetric(TreeNode* root) {
     return issym(root,root);
 }
 
-int main(){
-    vector<int> roots = {1, 2, 2, -1, 3, -1, 3};
 
+long long int widthOfBinaryTree(TreeNode* root) {
+    long long int sol;
+    int h=maxDepth(root)-1;
+    TreeNode* ls,*rs;
+    ls=rs=root;
+    for(int i=0;i<h-1;i++){
+        ls=ls->left;
+        rs=rs->right;
+    }
+    
+    if(ls->left!=nullptr&&rs->right!=nullptr){
+        sol=pow(2,h);
+    }
+    if(ls->left==nullptr&&rs->right==nullptr){
+        sol=pow(2,h)-2;
+    }
+    if(ls->left!=nullptr&&rs->right==nullptr || ls->left==nullptr&&rs->right!=nullptr){
+        sol=pow(2,h)-1;
+    }
+    return sol;
+}
+
+bool checkChildrenSum(TreeNode* root) {
+    if(root->left->data+root->right->data==root->data){
+        return true;
+    }else{
+        return false;
+    }
+    if(root->left==nullptr&&root->right==nullptr){
+        return true;
+    }
+    if(root->left==nullptr&&root->data!=root->right->data){
+        return false;
+    }
+    if(root->right==nullptr&&root->data!=root->left->data){
+        return false;
+    }
+    bool l=checkChildrenSum(root->left);
+    bool r=checkChildrenSum(root->right);
+    return r&&l;
+}
+
+int main(){
+    vector<int> roots = {10,4,6,1,3,2,4};
     TreeNode* root=buildTree(roots);
-    cout<<issym(root,root);
-    // for(auto x : verticalTraversal(root)){
-    //     for(auto y: x){
-    //         cout<<y<<" ";
-    //     }
-    //     cout<<"\n";
-    // }
+    cout<<checkChildrenSum(root);
     return 0;
 }
