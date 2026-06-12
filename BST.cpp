@@ -69,25 +69,26 @@ TreeNode* searchBST(TreeNode* root, int val,TreeNode* sol) {
 
 
 vector<int> floorCeilOfBST(TreeNode* root,int key){
-    vector<int> sol;
+    vector<int> sol={-1,999};
     TreeNode* l=root,*r=root;
     while(l!=nullptr){
         if(key>l->data){
-            sol[0]=min(sol[0],l->data);
+            sol[0]=max(sol[0],l->data);
             l=l->right;
         }
-        if(key<l->data){
-            sol[1]=max(sol[1],l->data);
+        else if(key<l->data){
+            sol[1]=min(sol[1],l->data);
             l=l->left;
         }
     }
+    if(sol[1]==999) sol[1]=-1;
     return sol;
 }
 
 int main(){
     vector<int> roots = {8, 4, 12, 2, 6, 10, 14};
     TreeNode* root=buildTree(roots);
-    for(auto x : floorCeilOfBST(root,9)){
+    for(auto x : floorCeilOfBST(root,15)){
         cout<<x<<" ";
     }
     return 0;
