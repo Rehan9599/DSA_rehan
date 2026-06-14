@@ -85,10 +85,62 @@ vector<int> floorCeilOfBST(TreeNode* root,int key){
     return sol;
 }
 
+void display(TreeNode* root){
+    if(root==nullptr){
+        return;
+    }
+    display(root->left);
+    cout<<root->data<<" ";
+    display(root->right);
+}
+
+TreeNode* insertIntoBST(TreeNode* root, int val) {
+    TreeNode* in=root;
+    while(in != nullptr){
+        if(in->data<val){
+            if(in->right==nullptr){
+                break;
+            }else{
+                in=in->right;
+            }
+        }else if(in->data>val){
+            if(in->left==nullptr){
+                break;
+            }else{
+                in=in->left;
+            }
+        }
+        if(in->left==nullptr&& in->right==nullptr) break;
+    }
+    TreeNode* d=new TreeNode(val);
+    if(in->data>val){
+        in->left=d;
+    }else if(in->data<val){
+        in->right=d;
+    }
+
+    return root;
+}
+void knum(TreeNode* root, int k,vector<int>&arr){
+    if(root==nullptr){
+        return;
+    }
+    knum(root->left,k,arr);
+    arr.push_back(root->data);
+    knum(root->right,k,arr);
+}
+
+vector<int> kLargesSmall(TreeNode* root,int k){
+    vector<int> arr;
+    knum(root,3,arr);
+    vector<int> sol ={arr[k-1],arr[arr.size()-k]};
+    return sol;
+}
+
 int main(){
     vector<int> roots = {8, 4, 12, 2, 6, 10, 14};
     TreeNode* root=buildTree(roots);
-    for(auto x : floorCeilOfBST(root,15)){
+    for(auto x: kLargesSmall(root,3)){
         cout<<x<<" ";
     }
     return 0;
