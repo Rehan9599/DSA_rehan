@@ -137,11 +137,58 @@ vector<int> kLargesSmall(TreeNode* root,int k){
     return sol;
 }
 
-int main(){
-    vector<int> roots = {8, 4, 12, 2, 6, 10, 14};
-    TreeNode* root=buildTree(roots);
-    for(auto x: kLargesSmall(root,3)){
-        cout<<x<<" ";
+vector<int> inorder(TreeNode* root,vector<int>& in){
+    if(root==nullptr) return in;
+
+    inorder(root->left,in);
+    in.push_back(root->data);
+    inorder(root->right,in);
+
+    return in;
+}
+
+bool isBST(TreeNode* root){
+    vector<int> in;
+    inorder(root,in);
+    for(int i=0;i<in.size()-1;i++){
+        if(in[i]>in[i+1]){
+            return false;
+        }
     }
+    return true;
+}
+
+TreeNode* lca(TreeNode* root, int p, int q){
+    vector<int> in;
+    TreeNode* lr=root;
+    inorder(root,in);
+    int k,l;
+    for(int i=0;i<in.size();i++){
+        if(in[i]==p) k=i;
+        if(in[i]==q) l=i;
+    }
+    int z=in[(k+l)%2==0?(k+l)/2:((k+l)/2)+1];
+    while(lr!=nullptr){
+        if(z<lr->data){
+            lr=lr->left;
+        }else if(z>lr->data){
+            lr=lr->right;
+        }else{
+            break;
+        }
+    }
+    return lr;
+}
+
+TreeNode* bstFromPreorder(vector<int>& preorder) {
+    vector<int> inor=preorder;
+    sort(inor.begin(),inor.end());
+    
+}
+
+int main(){
+    vector<int> roots = {5, 3, 6, 4, 2, -1, 7};
+    TreeNode* root=buildTree(roots);
+    cout<<lca(root,3,6)->data;
     return 0;
 }
