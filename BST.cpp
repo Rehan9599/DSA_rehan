@@ -180,15 +180,53 @@ TreeNode* lca(TreeNode* root, int p, int q){
     return lr;
 }
 
-TreeNode* bstFromPreorder(vector<int>& preorder) {
-    vector<int> inor=preorder;
-    sort(inor.begin(),inor.end());
-    
+TreeNode* bstFromPreorderHelper(const vector<int>& preorder, int& index, int upperBound) {
+    if (index >= static_cast<int>(preorder.size()) || preorder[index] > upperBound) {
+        return nullptr;
+    }
+
+    TreeNode* root = new TreeNode(preorder[index++]);
+    root->left = bstFromPreorderHelper(preorder, index, root->data);
+    root->right = bstFromPreorderHelper(preorder, index, upperBound);
+
+    return root;
 }
 
+TreeNode* bstFromPreorder(vector<int>& preorder) {
+    int index = 0;
+    return bstFromPreorderHelper(preorder, index, INT_MAX);
+}
+
+vector<int> succPredBST(TreeNode* root,int key){
+    vector<int> in,sol;
+    inorder(root,in);
+    int r=in.size(),l=0,m=(in.size()/2);
+    while(l<r){
+        if(key>in[m]){
+            l=m;
+        }else if(key<in[m]){
+            r=m;
+        }else{
+            break;
+        }
+        m=(l+r)/2;
+    }
+
+    if(m+1<in.size()){
+        sol={in[m-1],in[m+1]};
+    }else{
+        sol={in[m-1],-1};
+    }
+
+    return sol;
+}
+
+
 int main(){
-    vector<int> roots = {5, 3, 6, 4, 2, -1, 7};
+    vector<int> roots = {5, 2, 10, 1, 4, 7, 12};
     TreeNode* root=buildTree(roots);
-    cout<<lca(root,3,6)->data;
+    for(auto x: succPredBST(root,12)){
+        cout<<x<<" ";
+    }
     return 0;
 }
