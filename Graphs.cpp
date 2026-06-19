@@ -43,29 +43,54 @@ int findNumberOfComponent(int V, vector<vector<int>> &edges) {
     return ans;
 }
 
+void dfs(vector<int>& visited,vector<vector<int>> adj, vector<int>&sol,int v){
+    visited[v]=1;
+    sol.push_back(v);
+    for(auto x:adj[v]){
+        if(!visited[x]) dfs(visited,adj,sol,x);
+    }
+}
+
 vector<int> dfsOfGraph(int V, vector<vector<int>> edges) {
-    vector<int> sol;
-    vector<int> visited(V,0);
     vector<vector<int>> adj(V);
     for(int i=0;i<edges.size();i++){
         adj[edges[i][0]].push_back(edges[i][1]);
         adj[edges[i][1]].push_back(edges[i][0]);
     }
+    vector<int> visited(V,0),sol;
     for(int i=0;i<V;i++){
-        if(!visited[i]){
-            traverse(visited,adj,i);
-        }
+       if(!visited[i]) dfs(visited,adj,sol,i); 
     }
+    return sol;
 }
     
 vector<int> bfsOfGraph(int V, vector<vector<int>> edges) {
-    
+    vector<vector<int>> adj(V);
+    for(int i=0;i<edges.size();i++){
+        adj[edges[i][0]].push_back(edges[i][1]);
+        adj[edges[i][1]].push_back(edges[i][0]);
+    }
+    vector<int> visited(V,0),sol;
+    queue<int> q;
+    q.push(0);
+    while(!q.empty()){
+        int z=q.front();
+        q.pop();
+        sol.push_back(z);
+        visited[z]=1;
+        for(auto x: adj[z]){
+            if(!visited[x]) q.push(x);
+        }
+    }
+    return sol;
 }
 
 int main(){
-    int v=7;
-    vector<vector<int>> edges={{0,1},{1,2},{2,3},{4,5}};
-    cout<<findNumberOfComponent(v,edges);
+    int v=5;
+    vector<vector<int>> edges={{0,2},{0,3},{0,1},{2,4}};
+    for(auto x:dfsOfGraph(v,edges)){
+        cout<<x<<" ";
+    }
 
     return 0;
 }
