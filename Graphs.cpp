@@ -85,12 +85,51 @@ vector<int> bfsOfGraph(int V, vector<vector<int>> edges) {
     return sol;
 }
 
+
+int numProvinces(vector<vector<int>> adj) {
+    vector<vector<int>> edges;
+    for(int i=0;i<adj.size();i++){
+        for(int j=i+1;j<adj.size();j++){
+            if(adj[i][j]) edges.push_back({i,j});
+        }
+    }
+    return findNumberOfComponent(adj.size(),edges);
+}
+
+
+int orangesRotting(vector<vector<int>> &grid) {
+    int s=grid.size(),sol=0;
+    vector<vector<int>> visited(s,vector<int>(s,-1));
+    queue<vector<int>> q;
+    for(int i=0;i<s;i++){
+        for(int j=0;j<s;j++){
+            if(grid[i][j]==2) q.push({i,j,0});
+        }
+    }
+    while(!q.empty()){
+        vector<int> z=q.front();
+        q.pop();
+        int x=z[0],y=z[1],t=z[2];
+        visited[x][y]=2;
+        if(y+1<s) if(visited[x][y+1]!=2&&grid[x][y+1]!=0) q.push({x,y+1,t+1});
+        if(x-1>=0) if(visited[x-1][y]!=2&&grid[x-1][y]!=0) q.push({x-1,y,t+1});
+        if(y-1>=0) if(visited[x][y-1]!=2&&grid[x][y-1]!=0) q.push({x,y-1,t+1});
+        if(x+1<s) if(visited[x+1][y]!=2&&grid[x+1][y]!=0) q.push({x+1,y,t+1});
+        sol=max(sol,t);
+    }
+
+    for(int i=0;i<s;i++){
+        for(int j=0;j<s;j++){
+            if(grid[i][j]==1&&visited[i][j]!=2) return -1;
+        }
+    }
+    return sol;
+}
+
 int main(){
     int v=5;
-    vector<vector<int>> edges={{0,2},{0,3},{0,1},{2,4}};
-    for(auto x:dfsOfGraph(v,edges)){
-        cout<<x<<" ";
-    }
+    vector<vector<int>> adj={{2,1,1},{0,1,0},{1,0,1}};
+    cout<<orangesRotting(adj);
 
     return 0;
 }
