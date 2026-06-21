@@ -126,10 +126,70 @@ int orangesRotting(vector<vector<int>> &grid) {
     return sol;
 }
 
+
+vector<vector<int>> floodFill(vector<vector<int>> &image,int sr, int sc, int newColor) {
+    int s=image.size();
+    vector<vector<int>> visited(s,vector<int>(s,-1));
+    queue<vector<int>> q;
+    q.push({sr,sc});
+    while(!q.empty()){
+        vector<int> z=q.front();
+        q.pop();
+        int x=z[0],y=z[1];
+        visited[x][y]=newColor;
+        if(y+1<s) if(visited[x][y+1]!=newColor&&image[x][y+1]!=0) q.push({x,y+1});
+        if(x-1>=0) if(visited[x-1][y]!=newColor&&image[x-1][y]!=0) q.push({x-1,y});
+        if(y-1>=0) if(visited[x][y-1]!=newColor&&image[x][y-1]!=0) q.push({x,y-1});
+        if(x+1<s) if(visited[x+1][y]!=newColor&&image[x+1][y]!=0) q.push({x+1,y});
+    }
+
+    for(int i =0;i<s;i++){
+        for(int j=0;j<s;j++){
+            if(visited[i][j]==newColor){
+                image[i][j]=newColor;
+            }
+        }
+    }
+    return image;
+}
+
+
+vector<vector<int>> nearest(vector<vector<int>>& grid){
+    int row=grid.size();
+    int column=grid[0].size();
+    vector<vector<int>> visited(row,vector<int>(column,0)),distance(row,vector<int>(column,INT16_MAX));
+    queue<vector<int>> q;
+    for(int i =0;i<row;i++){
+        for(int j=0;j<column;j++){
+            if(grid[i][j]==1){
+                q.push({i,j,0});
+                visited[i][j]=1;
+            }
+        }
+    }
+    while(!q.empty()){
+        vector<int> z=q.front();
+        q.pop();
+        int x=z[0],y=z[1],t=z[2];
+        visited[x][y]=1;
+        if(y+1<column) if(visited[x][y+1]!=1) q.push({x,y+1,t+1});
+        if(x-1>=0) if(visited[x-1][y]!=1) q.push({x-1,y,t+1});
+        if(y-1>=0) if(visited[x][y-1]!=1) q.push({x,y-1,t+1});
+        if(x+1<row) if(visited[x+1][y]!=1) q.push({x+1,y,t+1});
+        distance[x][y]=min(t,distance[x][y]);
+    }
+    return distance;
+}
+
 int main(){
     int v=5;
-    vector<vector<int>> adj={{2,1,1},{0,1,0},{1,0,1}};
-    cout<<orangesRotting(adj);
+    vector<vector<int>> adj={{0,1,1,0},{1,1,0,0},{0,0,1,1}};
+    for(auto x:nearest(adj)){
+        for(auto y: x){
+            cout<<y<<" ";
+        }
+        cout<<'\n';
+    }
 
     return 0;
 }
