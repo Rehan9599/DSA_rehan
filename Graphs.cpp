@@ -181,6 +181,46 @@ vector<vector<int>> nearest(vector<vector<int>>& grid){
     return distance;
 }
 
+vector<vector<char>> fill(vector<vector<char>>& mat) {
+    int row=mat.size();
+    int column=mat[0].size();
+    vector<vector<int>> visited(row,vector<int>(column,0));
+    for(int i =0;i<row;i++){
+        if(mat[i][0]=='O'){
+                visited[i][0]=1;
+            }
+    }
+    for(int i =0;i<row;i++){
+        if(mat[i][column-1]=='O'){
+                visited[i][column-1]=1;
+            }
+    }
+    for(int j=0;j<column;j++){
+        if(mat[0][j]=='O'){
+                visited[0][j]=1;
+            }
+    }
+    for(int j =0;j<column;j++){
+        if(mat[row-1][j]=='O'){
+                visited[row-1][j]=1;
+            }
+    }
+    for(int i =0;i<row;i++){
+        for(int j=0;j<column;j++){
+            if(visited[i][j]!=1 && mat[i][j]=='O'){
+                mat[i][j]='X';
+                visited[i][j]=1;
+            }
+        }
+    }
+    return mat;
+}
+
+int numberOfEnclaves(vector<vector<int>> &grid) {
+    
+}
+
+
 int main(){
     int v=5;
     vector<vector<int>> adj={{0,1,1,0},{1,1,0,0},{0,0,1,1}};
