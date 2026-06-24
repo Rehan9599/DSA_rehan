@@ -283,15 +283,42 @@ int numIslands(vector<vector<char>> &grid){
     return sol;
 }
 
+void dfsTopo(vector<int>& visited,vector<vector<int>> adj,int v,stack<int>& st){
+    visited[v]=1;
+    for(auto x:adj[v]){
+        if(!visited[x]) dfsTopo(visited,adj,x,st);
+    }
+    st.push(v);
+}
+
+vector<int> topoSort(int V, vector<vector<int>>& adj){
+    vector<int> visited(V,0),sol;
+    stack<int> st;
+    for(int i=0;i<V;i++){
+        if(visited[i]!=1){
+            dfsTopo(visited,adj,i,st);
+        }
+    }
+    while(!st.empty()){
+        sol.push_back(st.top());
+        st.pop();
+    }
+    return sol;
+}
+
 int main(){
-    int v=5;
-    vector<vector<char>> adj={
-    {'1', '1', '1', '0', '1'},
-    {'1', '0', '0', '0', '0'},
-    {'1', '1', '1', '0', '1'},
-    {'0', '0', '0', '1', '1'}
+    int v=6;
+    vector<vector<int>> adj={
+    {},
+    {},
+    {3},
+    {1},
+    {0,1},
+    {0,2}
 };
-    cout<<numIslands(adj);
+    for(auto x: topoSort(v,adj)){
+        cout<<x<<" ";
+    }
 
     return 0;
 }
