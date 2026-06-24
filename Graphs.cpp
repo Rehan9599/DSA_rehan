@@ -217,19 +217,81 @@ vector<vector<char>> fill(vector<vector<char>>& mat) {
 }
 
 int numberOfEnclaves(vector<vector<int>> &grid) {
-    
+    int row=grid.size();
+    int column=grid[0].size();
+    vector<vector<int>> visited(row,vector<int>(column,0));
+    queue<vector<int>> q;
+    for(int i =0;i<row;i++){
+        for(int j=0;j<column;j++){
+            if(grid[i][j]==1){
+                q.push({i,j});
+            }
+        }
+    }
+    while(!q.empty()){
+        vector<int> z=q.front();
+        q.pop();
+        int x=z[0],y=z[1];
+        if((x==0||x==row-1)||(y==0||y==column-1)){
+            visited[x][y]=1;
+        }
+    }
+    int sol=0;
+    for(int i =0;i<row;i++){
+        for(int j=0;j<column;j++){
+            if(grid[i][j]==1&&visited[i][j]!=1){
+                sol++;
+            }
+        }
+    }
+    return sol;
 }
 
 
+void bfsNum(vector<vector<char>> &grid, int x,int y,int row,int column,vector<vector<int>>& visited){
+    queue<vector<int>> q;
+    q.push({x,y});
+    while(!q.empty()){
+        vector<int> z=q.front();
+        q.pop();
+        int x=z[0],y=z[1];
+        visited[x][y]=1;
+        if(y+1<column) if(visited[x][y+1]!=1&&grid[x][y+1]=='1') q.push({x,y+1});
+        if(x-1>=0) if(visited[x-1][y]!=1&&grid[x-1][y]=='1') q.push({x-1,y});
+        if(y-1>=0) if(visited[x][y-1]!=1&&grid[x][y-1]=='1') q.push({x,y-1});
+        if(x+1<row) if(visited[x+1][y]!=1&&grid[x+1][y]=='1') q.push({x+1,y});
+        if(y+1<column && x+1<row) if(visited[x+1][y+1]!=1&&grid[x+1][y+1]=='1') q.push({x+1,y+1});
+        if(x-1>=0&&y-1>=0) if(visited[x-1][y-1]!=1&&grid[x-1][y-1]=='1') q.push({x-1,y-1});
+        if(y-1>=0&&x+1<row) if(visited[x+1][y-1]!=1&&grid[x+1][y-1]=='1') q.push({x+1,y-1});
+        if(x-1>=0&&y+1<column) if(visited[x-1][y+1]!=1&&grid[x-1][y+1]=='1') q.push({x-1,y+1});
+    }
+}
+
+int numIslands(vector<vector<char>> &grid){
+    int sol=0;
+    int row=grid.size();
+    int column=grid[0].size();
+    vector<vector<int>> visited(row,vector<int>(column,0));
+    for(int i =0;i<row;i++){
+        for(int j=0;j<column;j++){
+            if(visited[i][j]!=1&&grid[i][j]=='1'){
+                bfsNum(grid,i,j,row,column,visited);
+                sol++;
+            }
+        }
+    }
+    return sol;
+}
+
 int main(){
     int v=5;
-    vector<vector<int>> adj={{0,1,1,0},{1,1,0,0},{0,0,1,1}};
-    for(auto x:nearest(adj)){
-        for(auto y: x){
-            cout<<y<<" ";
-        }
-        cout<<'\n';
-    }
+    vector<vector<char>> adj={
+    {'1', '1', '1', '0', '1'},
+    {'1', '0', '0', '0', '0'},
+    {'1', '1', '1', '0', '1'},
+    {'0', '0', '0', '1', '1'}
+};
+    cout<<numIslands(adj);
 
     return 0;
 }
