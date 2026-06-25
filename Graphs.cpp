@@ -342,7 +342,6 @@ int main(){
     {0,2}
     };
 
-    cout<<isCyclic(v,adj);
     // for(auto x: topoSort(v,adj)){
     //     cout<<x<<" ";
     // }
