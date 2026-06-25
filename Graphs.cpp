@@ -306,19 +306,46 @@ vector<int> topoSort(int V, vector<vector<int>>& adj){
     return sol;
 }
 
+
+// void dfsCycle(vector<int>& visited,vector<vector<int>> adj,int v,vector<int>& c,bool& sol){
+//     visited[v]=1;
+//     c.push_back(v);
+//     for(auto x:adj[v]){
+//         for(auto y:c){
+//             if(x==y) {
+//                 sol=true;
+//                 cout<<x<<" "<<y<<"\n";
+//             }
+//         }
+//         if(!visited[x]) dfsCycle(visited,adj,x,c,sol);
+//     }
+// }
+
+// bool isCyclic(int N, vector<vector<int>> adj) {
+//     vector<int> visited(N,0);
+//     bool sol=false;
+//     for(int i=0;i<N;i++){
+//         if(visited[i]!=1){
+//             vector<int> c;
+//             dfsCycle(visited,adj,i,c,sol);
+//         }
+//     }
+//     return sol;
+// }
+
 int main(){
-    int v=6;
+    int v=4;
     vector<vector<int>> adj={
+    {1,2},
+    {2},
     {},
-    {},
-    {3},
-    {1},
-    {0,1},
     {0,2}
-};
-    for(auto x: topoSort(v,adj)){
-        cout<<x<<" ";
-    }
+    };
+
+    cout<<isCyclic(v,adj);
+    // for(auto x: topoSort(v,adj)){
+    //     cout<<x<<" ";
+    // }
 
     return 0;
 }
