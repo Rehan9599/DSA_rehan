@@ -307,44 +307,88 @@ vector<int> topoSort(int V, vector<vector<int>>& adj){
 }
 
 
-// void dfsCycle(vector<int>& visited,vector<vector<int>> adj,int v,vector<int>& c,bool& sol){
-//     visited[v]=1;
-//     c.push_back(v);
-//     for(auto x:adj[v]){
-//         for(auto y:c){
-//             if(x==y) {
-//                 sol=true;
-//                 cout<<x<<" "<<y<<"\n";
-//             }
-//         }
-//         if(!visited[x]) dfsCycle(visited,adj,x,c,sol);
-//     }
-// }
 
-// bool isCyclic(int N, vector<vector<int>> adj) {
-//     vector<int> visited(N,0);
-//     bool sol=false;
-//     for(int i=0;i<N;i++){
-//         if(visited[i]!=1){
-//             vector<int> c;
-//             dfsCycle(visited,adj,i,c,sol);
-//         }
-//     }
-//     return sol;
-// }
+
+bool isCyclicbfs(int N, vector<vector<int>> adj) {
+    vector<int> visited(N,0);
+    queue<pair<int,int>> q;
+    q.push({0,-1});
+    while(!q.empty()){
+        int node=q.front().first;
+        int parent= q.front().second;
+        q.pop(); 
+        
+        for(auto x: adj[node]){
+            if(!visited[x]){
+                q.push({x,node});
+                visited[node]=1;
+            }else if(parent!=x){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+bool dfsCycleUn(vector<int>& visited,vector<vector<int>> adj,int node,int parent){
+    visited[node]=1;
+    for(auto x:adj[node]){
+        if(!visited[x]){
+           if( dfsCycleUn(visited,adj,x,node)==true) return true;
+        }else if(parent!=x){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool isCyclicUn(int N, vector<vector<int>> adj) {
+    vector<int> visited(N,0);
+    for(int i=0;i<N;i++){
+        if(visited[i]!=1){
+            if(dfsCycleUn(visited,adj,i,-1)==true) return true;
+        }
+    }
+    return false;
+}
+bool dfsCycledir(vector<int>& visited,vector<vector<int>> adj,int node,vector<int>& vpath){
+    visited[node]=1;
+    vpath[node]=1;
+    for(auto x:adj[node]){
+        if(!visited[x]){
+           if( dfsCycledir(visited,adj,x,vpath)==true) return true;
+        }else if(vpath[x]){
+            return true;
+        }
+    }
+    vpath[node]=0;
+    return false;
+}
+
+bool isCyclicdir(int N, vector<vector<int>> adj) {
+    vector<int> visited(N,0);
+    vector<int> vpath(N,0);
+    for(int i=0;i<N;i++){
+        if(visited[i]!=1){
+            if(dfsCycledir(visited,adj,i,vpath)==true) return true;
+        }
+    }
+    return false;
+}
 
 int main(){
-    int v=4;
+    int v=6;
     vector<vector<int>> adj={
-    {1,2},
-    {2},
-    {},
-    {0,2}
+    {1},
+    {2,5},
+    {3},
+    {4},
+    {1},
+    {}
     };
 
-    // for(auto x: topoSort(v,adj)){
-    //     cout<<x<<" ";
-    // }
+    cout<<isCyclicdir(v,adj);
 
     return 0;
 }
