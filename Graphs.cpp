@@ -377,18 +377,104 @@ bool isCyclicdir(int N, vector<vector<int>> adj) {
     return false;
 }
 
-int main(){
-    int v=6;
-    vector<vector<int>> adj={
-    {1},
-    {2,5},
-    {3},
-    {4},
-    {1},
-    {}
-    };
 
-    cout<<isCyclicdir(v,adj);
+vector<int> shortestPath(vector<vector<int>>& edges, int N,int M){
+    vector<vector<int>> adj(N);
+    for(int i=0;i<edges.size();i++){
+        adj[edges[i][0]].push_back(edges[i][1]);
+        adj[edges[i][1]].push_back(edges[i][0]);
+    }
+    vector<int> distance(N,INT16_MAX),sol;
+    queue<pair<int,int>> q;
+    q.push({0,0});
+    while(!q.empty()){
+        int node=q.front().first;
+        int dist=q.front().second;
+        q.pop();
+        
+        distance[node]=min(dist,distance[node]);
+        for(auto x: adj[node]){
+            if(dist<distance[x]) q.push({x,dist+1});
+        }
+    }
+    return distance;
+}
+
+vector < int > shortestPathd(int N, int M, vector < vector < int >> & edges) {
+    vector<vector<int>> adj(N);
+    for(int i=0;i<M;i++){
+        adj[edges[i][0]].push_back(edges[i][1]);
+    }
+    vector<int> distance(N,INT16_MAX);
+    queue<pair<int,int>> q;
+    q.push({0,0});
+    while(!q.empty()){
+        int node=q.front().first;
+        int dist=q.front().second;
+        q.pop();
+        distance[node]=min(dist,distance[node]);
+        for(auto x: adj[node]){
+            if(dist<distance[x]){
+                for(int i=0;i<edges.size();i++){
+                    if(edges[i][0]==node&& edges[i][1]==x){
+                        q.push({x,edges[i][2]+dist});
+                    }
+                }
+            };
+        }
+    }
+
+    for(auto&x: distance){
+        if(x==INT16_MAX){
+            x=-1;
+        }
+    }
+    return distance;
+}
+
+vector<int> dijkstra(int V, vector<vector<int>> edges, int S) {
+    vector<vector<int>> adj(V);
+    for(int i=0;i<edges.size();i++){
+        adj[edges[i][0]].push_back(edges[i][1]);
+        adj[edges[i][1]].push_back(edges[i][0]);
+    }
+    vector<int> distance(V,INT16_MAX);
+    queue<pair<int,int>> q;
+    q.push({S,0});
+    while(!q.empty()){
+        int node=q.front().first;
+        int dist=q.front().second;
+        q.pop();
+        distance[node]=min(dist,distance[node]);
+        for(auto x: adj[node]){
+            if(dist<distance[x]){
+                for(int i=0;i<edges.size();i++){
+                    if(edges[i][0]==node&&edges[i][1]==x || edges[i][0]==x&&edges[i][1]==node){
+                        q.push({x,edges[i][2]+dist});
+                    }
+                }
+            };
+        }
+    }
+
+    for(auto&x: distance){
+        if(x==INT16_MAX){
+            x=-1;
+        }
+    }
+    return distance;
+}
+
+int main(){
+    int n=3;
+    vector<vector<int>> edges = {
+    {{0, 1, 1}, {0, 2, 6}, {1, 2, 3}}
+    };
+    
+
+    for(auto x:dijkstra(n,edges,2)){
+        cout<<x<<" ";
+    }
 
     return 0;
 }
