@@ -14,9 +14,6 @@
 #include <string>
 using namespace std;
 
-// vector<vector<int>> createAdjL(int v,vector<vector<int>> edges){
-
-// }
 
 void traverse(vector<int>& visited, vector<vector<int>>& adj, int u) {
     visited[u] = 1;
